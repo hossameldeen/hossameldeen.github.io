@@ -25,11 +25,9 @@
       if (curRoom == dest) return curPath;
 
       for (var i = 0; i < steps.length; ++i) {
-        var newRoom;
-        if (curRoom + steps[i] === nRooms - 1 && curRoom == nRooms - 1 - 7)
+        var newRoom = (curRoom + steps[i] + nRooms - 1) % (nRooms - 1);
+        if (curRoom + steps[i] === nRooms - 1 && steps[i] === 7)
           newRoom = curRoom + steps[i];
-        else
-          newRoom = (curRoom + steps[i] + nRooms) % nRooms;
 
         Q.push([newRoom, curPath.concat(names[i])]);
       }
