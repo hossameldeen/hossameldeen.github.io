@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Maplestory Ludi Maze PQ</title>
+
+<script>
+  function solve(src, dest) {
+
+    const steps = [ 7,   4,   -3],
+          names = ['L', 'M', 'R'],
+          nRooms = 16;
+
+    --src; --dest;
+
+    var Q = [[src, []]];
+
+    var nIterations = 0;
+
+    while(Q.length > 0) {
+
+      var curRoom = Q[0][0], curPath = Q[0][1];
+      Q.shift();
+      console.log(curRoom);
+      if (curRoom == dest) return curPath;
+
+      for (var i = 0; i < steps.length; ++i) {
+        var newRoom;
+        if (curRoom + steps[i] === nRooms - 1 && curRoom == nRooms - 1 - 7)
+          newRoom = curRoom + steps[i];
+        else
+          newRoom = (curRoom + steps[i] + nRooms) % nRooms;
+
+        Q.push([newRoom, curPath.concat(names[i])]);
+      }
+
+      ++nIterations;
+      if (nIterations > 1000000) {
+        return "Took too long to calculate it. A bug on my side."
+      }
+
+    }
+
+    return "Found no path. A bug on my side.";
+  }
+
+  function update() {
+    var src = parseInt(document.getElementById("src").value),
+        dest = parseInt(document.getElementById("dest").value);
+    var sol = document.getElementById("sol");
+
+    sol.innerHTML = "";
+
+    if (isNaN(src) || isNaN(dest) || src < 1 || src > 16 || dest < 1 || dest > 16) {
+      sol.innerHTML = "Please, make sure both rooms are in the range [1-16]."
+      return;
+    }
+
+    var minPath = solve(src, dest);
+
+    sol.innerHTML = minPath.length == 0 ? "You're already there" : minPath;
+  }
+</script>
+
+<style>
+  * {
+    font-size: 26px;
+  }
+</style>
+
+</head>
+
+<body style="text-align:center">
+<br/><br/>
+<input type="number" id="src" placeholder="Your Room" oninput="update()"><br/>
+<input type="number" id="dest" placeholder="Goal Room" oninput="update()"><br/>
+<br/><b><div id="sol" style="display: inline;">To find the shortest path between 2 rooms in Ludi maze PQ, enter their numbers above (e.g, 3 and 8)</div></b>
+</body>
+
+</html>
