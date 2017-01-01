@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Credits: http://blog.ittybittyapps.com/blog/2013/09/03/git-pre-push/
+
+CMD="(cd elm && elm-make Main.elm --output=../gen/javascripts/elm-main.js)"
+protected_branch='master'
+
+$CMD
+RESULT=$?
+if [ $RESULT -ne 0 ]; then
+    echo "failed $CMD"
+    exit 1
+fi
+
+exit 0
