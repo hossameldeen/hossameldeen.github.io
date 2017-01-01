@@ -7930,7 +7930,7 @@ var _evancz$elm_markdown$Markdown$Options = F4(
 		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
 	});
 
-var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\nUse at your own risk.\n\n## Writing\n\n- [Stress](/stress.txt)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/maplestory-lmpq-solver.html).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
+var _user$project$Main$content = '\nThe link you wrote doesn\'t exist.\n\nGo to [https://hossameldeengithub.io/](https://hossameldeengithub.io/)? perhaps you find it there.\n';
 var _user$project$Main$model = {};
 var _user$project$Main$initialSizeCmd = _elm_lang$core$Platform_Cmd$none;
 var _user$project$Main$subscriptions = function (model) {
