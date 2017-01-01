@@ -4,10 +4,7 @@
 
 echo 'Executing pre-commit...'
 
-CMD="(cd elm && elm-make Main.elm --output=../gen/javascripts/elm-main.js)"
-protected_branch='master'
-
-$CMD
+(cd elm && elm-make Main.elm --output=../gen/javascripts/elm-main.js)
 RESULT=$?
 if [ $RESULT -ne 0 ]; then
     echo "failed $CMD"
