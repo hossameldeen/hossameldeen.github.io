@@ -2,6 +2,8 @@
 
 # Credits: http://blog.ittybittyapps.com/blog/2013/09/03/git-pre-push/
 
+echo 'Executing pre-commit...'
+
 CMD="(cd elm && elm-make Main.elm --output=../gen/javascripts/elm-main.js)"
 protected_branch='master'
 
@@ -11,5 +13,7 @@ if [ $RESULT -ne 0 ]; then
     echo "failed $CMD"
     exit 1
 fi
+
+echo 'Executed pre-commit.'
 
 exit 0
