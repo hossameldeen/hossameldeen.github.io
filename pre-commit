@@ -5,7 +5,14 @@
 (cd elm && elm-make Main.elm --output=../assets/gen/javascripts/elm-main.js)
 RESULT=$?
 if [ $RESULT -ne 0 ]; then
-    echo "failed $CMD"
+    echo "failed to compile Main.elm"
+    exit 1
+fi
+
+(cd elm && elm-make NotFound.elm --output=../assets/gen/javascripts/elm-not-found.js)
+RESULT=$?
+if [ $RESULT -ne 0 ]; then
+    echo "failed to compile NotFound.elm"
     exit 1
 fi
 
