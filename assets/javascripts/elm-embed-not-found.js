@@ -1,1 +1,1 @@
-var app = Elm.NotFound.fullscreen();
+var app = Elm.Main.fullscreen();
