@@ -4,7 +4,7 @@
 
 echo 'Executing pre-commit...'
 
-(cd elm && elm-make Main.elm --output=../gen/javascripts/elm-main.js)
+(cd elm && elm-make Main.elm --output=../assets/gen/javascripts/elm-main.js)
 RESULT=$?
 if [ $RESULT -ne 0 ]; then
     echo "failed $CMD"
