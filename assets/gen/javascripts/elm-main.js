@@ -8906,6 +8906,121 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 var _elm_lang$http$Native_Http = function() {
 
 
@@ -17483,33 +17598,35 @@ var _pablohirafuji$elm_markdown$Markdown$toHtml = F2(
 	});
 
 var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress.txt)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/maplestory-lmpq-solver.html).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
-var _user$project$Main$link = function (inline) {
-	var _p0 = inline;
-	if (_p0.ctor === 'Link') {
-		return _elm_lang$html$Html$text('hamada');
-	} else {
-		return A2(
-			_pablohirafuji$elm_markdown$Markdown_Inline$defaultHtml,
-			_elm_lang$core$Maybe$Just(_user$project$Main$link),
-			inline);
-	}
-};
-var _user$project$Main$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		_elm_lang$core$List$concat(
-			A2(
-				_elm_lang$core$List$map,
-				A2(
-					_pablohirafuji$elm_markdown$Markdown_Block$defaultHtml,
-					_elm_lang$core$Maybe$Nothing,
-					_elm_lang$core$Maybe$Just(_user$project$Main$link)),
-				A2(
-					_pablohirafuji$elm_markdown$Markdown_Block$parse,
-					_elm_lang$core$Maybe$Just(
-						{softAsHardLineBreak: true, rawHtml: _pablohirafuji$elm_markdown$Markdown_Config$DontParse}),
-					_user$project$Main$content))));
+var _user$project$Main$invertedOr = F2(
+	function (x, y) {
+		return !(x || y);
+	});
+var _user$project$Main$maybePreventDefault = F2(
+	function (msg, preventDefault) {
+		var _p0 = preventDefault;
+		if (_p0 === true) {
+			return _elm_lang$core$Json_Decode$succeed(msg);
+		} else {
+			return _elm_lang$core$Json_Decode$fail('Normal link');
+		}
+	});
+var _user$project$Main$preventDefault2 = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Main$invertedOr,
+	A2(_elm_lang$core$Json_Decode$field, 'ctrlKey', _elm_lang$core$Json_Decode$bool),
+	A2(_elm_lang$core$Json_Decode$field, 'metaKey', _elm_lang$core$Json_Decode$bool));
+var _user$project$Main$onPreventDefaultClick = function (message) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'click',
+		_elm_lang$core$Native_Utils.update(
+			_elm_lang$html$Html_Events$defaultOptions,
+			{preventDefault: true}),
+		A2(
+			_elm_lang$core$Json_Decode$andThen,
+			_user$project$Main$maybePreventDefault(message),
+			_user$project$Main$preventDefault2));
 };
 var _user$project$Main$Model = function (a) {
 	return {route: a};
@@ -17577,6 +17694,52 @@ var _user$project$Main$update = F2(
 var _user$project$Main$NewUrl = function (a) {
 	return {ctor: 'NewUrl', _0: a};
 };
+var _user$project$Main$link = function (inline) {
+	var _p2 = inline;
+	if (_p2.ctor === 'Link') {
+		var _p3 = _p2._0;
+		return A2(
+			_elm_lang$html$Html$a,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$href(_p3),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$title(
+						A2(_elm_lang$core$Maybe$withDefault, '', _p2._1)),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Main$onPreventDefaultClick(
+							_user$project$Main$NewUrl(_p3)),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			A2(_elm_lang$core$List$map, _user$project$Main$link, _p2._2));
+	} else {
+		return A2(
+			_pablohirafuji$elm_markdown$Markdown_Inline$defaultHtml,
+			_elm_lang$core$Maybe$Just(_user$project$Main$link),
+			inline);
+	}
+};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		_elm_lang$core$List$concat(
+			A2(
+				_elm_lang$core$List$map,
+				A2(
+					_pablohirafuji$elm_markdown$Markdown_Block$defaultHtml,
+					_elm_lang$core$Maybe$Nothing,
+					_elm_lang$core$Maybe$Just(_user$project$Main$link)),
+				A2(
+					_pablohirafuji$elm_markdown$Markdown_Block$parse,
+					_elm_lang$core$Maybe$Just(
+						{softAsHardLineBreak: true, rawHtml: _pablohirafuji$elm_markdown$Markdown_Config$DontParse}),
+					_user$project$Main$content))));
+};
 var _user$project$Main$UrlChange = function (a) {
 	return {ctor: 'UrlChange', _0: a};
 };
@@ -17594,7 +17757,7 @@ var _user$project$Main$main = A2(
 			};
 		},
 		update: _user$project$Main$update,
-		subscriptions: function (_p2) {
+		subscriptions: function (_p4) {
 			return _elm_lang$core$Platform_Sub$none;
 		},
 		view: _user$project$Main$view

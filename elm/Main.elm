@@ -1,4 +1,7 @@
-import Html exposing (Html, div)
+import Html exposing (Html, a, div)
+import Html.Attributes exposing (href, title)
+import Html.Events exposing (defaultOptions, onWithOptions)
+import Json.Decode
 import Markdown
 import Markdown.Block
 import Markdown.Inline
@@ -60,8 +63,31 @@ view model =
 
 link inline =
   case inline of
-    Markdown.Inline.Link url maybeTitle inlines -> Html.text "hamada"
+    Markdown.Inline.Link url maybeTitle inlines ->
+      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (NewUrl url)] (List.map link inlines)
     _ -> Markdown.Inline.defaultHtml (Just link) inline
+
+onPreventDefaultClick message =
+    onWithOptions "click"
+        { defaultOptions | preventDefault = True }
+        (preventDefault2
+            |> Json.Decode.andThen (maybePreventDefault message)
+        )
+preventDefault2 =
+    Json.Decode.map2
+        (invertedOr)
+        (Json.Decode.field "ctrlKey" Json.Decode.bool)
+        (Json.Decode.field "metaKey" Json.Decode.bool)
+maybePreventDefault msg preventDefault =
+    case preventDefault of
+        True ->
+            Json.Decode.succeed msg
+
+        False ->
+            Json.Decode.fail "Normal link"
+invertedOr : Bool -> Bool -> Bool
+invertedOr x y =
+    not (x || y)
 
 -- CONTENT
 
