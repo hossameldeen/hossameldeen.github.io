@@ -1,1 +1,1 @@
-(cd elm && elm-live Main.elm --output=../assets/gen/javascripts/elm-main.js --open --debug --dir=..)
+(cd elm && elm-live Main.elm --output=../assets/gen/javascripts/elm-main.js --open --debug --dir=.. --pushstate)
