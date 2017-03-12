@@ -1,5 +1,6 @@
-import Html exposing (Html, program)
+import Html exposing (Html, div, program)
 import Markdown
+import Markdown.Config
 
 
 main : Program Never Model Msg
@@ -31,13 +32,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  Markdown.toHtmlWith
-    { githubFlavored = Just { tables = False, breaks = True }
-    , defaultHighlighting = Nothing
-    , sanitize = True
-    , smartypants = False
-    }
-    [] content
+  Markdown.toHtml (Just {softAsHardLineBreak = True, rawHtml = Markdown.Config.DontParse}) content |> div []
 
 
 -- SUBSCRIPTIONS
