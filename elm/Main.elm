@@ -1,11 +1,7 @@
-import Html exposing (Html, a, div)
+import Html exposing (Html, a, div, pre, text)
 import Html.Attributes exposing (href, title)
 import Html.Events exposing (defaultOptions, onWithOptions)
 import Json.Decode
-import Markdown
-import Markdown.Block
-import Markdown.Inline
-import Markdown.Config
 import Navigation exposing (Location)
 import UrlParser exposing (..)
 
@@ -55,39 +51,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    content
-    |> Markdown.Block.parse (Just {softAsHardLineBreak = True, rawHtml = Markdown.Config.DontParse})
-    |> List.map (Markdown.Block.defaultHtml Nothing (Just link))
-    |> List.concat
-    |> div []
-
-link inline =
-  case inline of
-    Markdown.Inline.Link url maybeTitle inlines ->
-      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (NewUrl url)] (List.map link inlines)
-    _ -> Markdown.Inline.defaultHtml (Just link) inline
-
-onPreventDefaultClick message =
-    onWithOptions "click"
-        { defaultOptions | preventDefault = True }
-        (preventDefault2
-            |> Json.Decode.andThen (maybePreventDefault message)
-        )
-preventDefault2 =
-    Json.Decode.map2
-        (invertedOr)
-        (Json.Decode.field "ctrlKey" Json.Decode.bool)
-        (Json.Decode.field "metaKey" Json.Decode.bool)
-maybePreventDefault msg preventDefault =
-    case preventDefault of
-        True ->
-            Json.Decode.succeed msg
-
-        False ->
-            Json.Decode.fail "Normal link"
-invertedOr : Bool -> Bool -> Bool
-invertedOr x y =
-    not (x || y)
+  pre [] [text content]
 
 -- CONTENT
 

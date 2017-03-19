@@ -2,7 +2,7 @@
 
 # Credits: http://blog.ittybittyapps.com/blog/2013/09/03/git-pre-push/
 
-(cd elm && elm-make Main.elm --output=../assets/gen/javascripts/elm-main.js)
+(cd elm && elm-make Main.elm --output=../assets/gen/javascripts/elm-main.js --yes)
 RESULT=$?
 if [ $RESULT -ne 0 ]; then
     echo "failed to compile Main.elm"

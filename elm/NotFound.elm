@@ -1,6 +1,4 @@
-import Html exposing (Html, div, program)
-import Markdown
-import Markdown.Config
+import Html exposing (Html, div, pre, program, text)
 
 
 main : Program Never Model Msg
@@ -32,7 +30,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  Markdown.toHtml (Just {softAsHardLineBreak = True, rawHtml = Markdown.Config.DontParse}) content |> div []
+  pre [] [text content]
 
 
 -- SUBSCRIPTIONS
