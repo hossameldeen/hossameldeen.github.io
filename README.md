@@ -11,3 +11,5 @@ Mar-19, 2017: Currently, you're thinking about understanding regular expressions
 Your bigger problem: clicking on links & wanting to have an Elm representation of Markdown.
 
 Now, you're thinking about using elm-tools/parser and write a simple parser for what you need & increment on it only when you need.
+
+New update: Wow, seems like `pablohirafuji` was right all along. What I probably need is to provide nicer wrapper APIs around his API (and perhaps suggest them to him if worked & came out nice). So, I'm now going back a direction or 2 to using `pablohirafuji/elm-markdown`.
