@@ -57,15 +57,15 @@ view : Model -> Html Msg
 view model =
     content
     |> parseWith {softAsHardLineBreak = True, rawHtml = MDConfig.DontParse}
-    |> List.map (MDBlock.defaultHtml Nothing (Just link))
+    |> List.map (MDBlock.defaultHtml Nothing (Just customizeLink))
     |> List.concat
     |> div []
 
-link inline =
+customizeLink inline =
   case inline of
     MDInline.Link url maybeTitle inlines ->
-      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (NewUrl url)] (List.map link inlines)
-    _ -> MDInline.defaultHtml (Just link) inline
+      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (NewUrl url)] (List.map customizeLink inlines)
+    _ -> MDInline.defaultHtml (Just customizeLink) inline
 
 onPreventDefaultClick message =
     onWithOptions "click"

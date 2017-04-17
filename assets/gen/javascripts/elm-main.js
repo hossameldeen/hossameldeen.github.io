@@ -17700,7 +17700,7 @@ var _user$project$Main$update = F2(
 var _user$project$Main$NewUrl = function (a) {
 	return {ctor: 'NewUrl', _0: a};
 };
-var _user$project$Main$link = function (inline) {
+var _user$project$Main$customizeLink = function (inline) {
 	var _p2 = inline;
 	if (_p2.ctor === 'Link') {
 		var _p3 = _p2._0;
@@ -17721,11 +17721,11 @@ var _user$project$Main$link = function (inline) {
 					}
 				}
 			},
-			A2(_elm_lang$core$List$map, _user$project$Main$link, _p2._2));
+			A2(_elm_lang$core$List$map, _user$project$Main$customizeLink, _p2._2));
 	} else {
 		return A2(
 			_pablohirafuji$elm_markdown$Markdown_Inline$defaultHtml,
-			_elm_lang$core$Maybe$Just(_user$project$Main$link),
+			_elm_lang$core$Maybe$Just(_user$project$Main$customizeLink),
 			inline);
 	}
 };
@@ -17739,7 +17739,7 @@ var _user$project$Main$view = function (model) {
 				A2(
 					_pablohirafuji$elm_markdown$Markdown_Block$defaultHtml,
 					_elm_lang$core$Maybe$Nothing,
-					_elm_lang$core$Maybe$Just(_user$project$Main$link)),
+					_elm_lang$core$Maybe$Just(_user$project$Main$customizeLink)),
 				A2(
 					_user$project$MarkdownWrapper$parseWith,
 					{softAsHardLineBreak: true, rawHtml: _pablohirafuji$elm_markdown$Markdown_Config$DontParse},
