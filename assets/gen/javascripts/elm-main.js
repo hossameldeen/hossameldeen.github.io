@@ -17597,18 +17597,11 @@ var _pablohirafuji$elm_markdown$Markdown$toHtml = F2(
 				A2(_pablohirafuji$elm_markdown$Markdown_Block$parse, maybeOptions, rawText)));
 	});
 
-var _user$project$MarkdownWrapper$parseWith = function (o) {
-	return _pablohirafuji$elm_markdown$Markdown_Block$parse(
-		_elm_lang$core$Maybe$Just(o));
-};
-var _user$project$MarkdownWrapper$parse = _pablohirafuji$elm_markdown$Markdown_Block$parse(_elm_lang$core$Maybe$Nothing);
-
-var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress.txt)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/maplestory-lmpq-solver.html).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
-var _user$project$Main$invertedOr = F2(
+var _user$project$MarkdownWrapper$invertedOr = F2(
 	function (x, y) {
 		return !(x || y);
 	});
-var _user$project$Main$maybePreventDefault = F2(
+var _user$project$MarkdownWrapper$maybePreventDefault = F2(
 	function (msg, preventDefault) {
 		var _p0 = preventDefault;
 		if (_p0 === true) {
@@ -17617,12 +17610,12 @@ var _user$project$Main$maybePreventDefault = F2(
 			return _elm_lang$core$Json_Decode$fail('Normal link');
 		}
 	});
-var _user$project$Main$preventDefault2 = A3(
+var _user$project$MarkdownWrapper$preventDefault2 = A3(
 	_elm_lang$core$Json_Decode$map2,
-	_user$project$Main$invertedOr,
+	_user$project$MarkdownWrapper$invertedOr,
 	A2(_elm_lang$core$Json_Decode$field, 'ctrlKey', _elm_lang$core$Json_Decode$bool),
 	A2(_elm_lang$core$Json_Decode$field, 'metaKey', _elm_lang$core$Json_Decode$bool));
-var _user$project$Main$onPreventDefaultClick = function (message) {
+var _user$project$MarkdownWrapper$onPreventDefaultClick = function (message) {
 	return A3(
 		_elm_lang$html$Html_Events$onWithOptions,
 		'click',
@@ -17631,9 +17624,93 @@ var _user$project$Main$onPreventDefaultClick = function (message) {
 			{preventDefault: true}),
 		A2(
 			_elm_lang$core$Json_Decode$andThen,
-			_user$project$Main$maybePreventDefault(message),
-			_user$project$Main$preventDefault2));
+			_user$project$MarkdownWrapper$maybePreventDefault(message),
+			_user$project$MarkdownWrapper$preventDefault2));
 };
+var _user$project$MarkdownWrapper$parseWith = function (o) {
+	return _pablohirafuji$elm_markdown$Markdown_Block$parse(
+		_elm_lang$core$Maybe$Just(o));
+};
+var _user$project$MarkdownWrapper$parse = _pablohirafuji$elm_markdown$Markdown_Block$parse(_elm_lang$core$Maybe$Nothing);
+var _user$project$MarkdownWrapper$NewUrl = function (a) {
+	return {ctor: 'NewUrl', _0: a};
+};
+var _user$project$MarkdownWrapper$customizeLink = function (inline) {
+	var _p1 = inline;
+	if (_p1.ctor === 'Link') {
+		var _p2 = _p1._0;
+		return A2(
+			_elm_lang$html$Html$a,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$href(_p2),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$title(
+						A2(_elm_lang$core$Maybe$withDefault, '', _p1._1)),
+					_1: {
+						ctor: '::',
+						_0: _user$project$MarkdownWrapper$onPreventDefaultClick(
+							_user$project$MarkdownWrapper$NewUrl(_p2)),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			A2(_elm_lang$core$List$map, _user$project$MarkdownWrapper$customizeLink, _p1._2));
+	} else {
+		return A2(
+			_pablohirafuji$elm_markdown$Markdown_Inline$defaultHtml,
+			_elm_lang$core$Maybe$Just(_user$project$MarkdownWrapper$customizeLink),
+			inline);
+	}
+};
+var _user$project$MarkdownWrapper$viewMD = function (content) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		_elm_lang$core$List$concat(
+			A2(
+				_elm_lang$core$List$map,
+				A2(
+					_pablohirafuji$elm_markdown$Markdown_Block$defaultHtml,
+					_elm_lang$core$Maybe$Nothing,
+					_elm_lang$core$Maybe$Just(_user$project$MarkdownWrapper$customizeLink)),
+				A2(
+					_user$project$MarkdownWrapper$parseWith,
+					{softAsHardLineBreak: true, rawHtml: _pablohirafuji$elm_markdown$Markdown_Config$DontParse},
+					content))));
+};
+
+var _user$project$NotFound$content = '\nThe link you wrote doesn\'t exist.\n\nGo to [https://hossameldeengithub.io/](https://hossameldeengithub.io/)? perhaps you find it there.\n';
+var _user$project$NotFound$view = _user$project$MarkdownWrapper$viewMD(_user$project$NotFound$content);
+
+var _user$project$Writing$stress = '\nStress\n======\n\nComputers, TV and books are very stressful to me.\n\nDid you ever try to study with a feast right outside your room? Or\neven worse, a Ctrl+T away? And not only that, but also an ever-\nchanging feast only the knowing of which thristens and satisfies your\ncuriosity. That\'s what dealing with computers is like.\n\nComputers are these great, really great simulators. Want to be in war?\n... What a breeze. Want to sit with the funniest people on Earth? ...\nNo problem.\n\nSo are the TV and books. Only less interactive, with less control on\nthem, and more clumsy.\n\nBut does that render them purely evil?\n\nThe real world doesn\'t happen in books. It happens out there. On the\nstreet outside your apartment. That\'s what you should be interacting\nwith, that\'s what you should be a master in dealing with.\n\nBut again, does this render the subjects useless?\n\nEvery culture is rich in some ideas and poor in others. I forgot the\ncount of acquaintances who see nothing wrong with staring. With apply-\ning an X-ray scan with their eyes on anyone walking on the streets. To\nyou of my acquaintances, *this is not okay!*\n\nSame goes for a community that has never heard of sada2a, that has\nnever heard of feeding a traveller, \"son of the road\" as we call in\nArabic.\n\nSo, these people, perhaps they would never get in touch with such\nideas except through a simulation of lives outside theirs, out their\nstreets.\n\nSo, computers are what computers are. They are useful, they are handy.\nBut it\'s not right obe able to feast 24/7 with only a click away. This\nmakes me *very* stressed. Books are no different, but they\'re more\nscarce and more clumsy.\n\nProbably, in order for computers to be less stressful to me, I need to\nfind a way to make it harder to access the feast within it. I need to\nseparate between its feasts and its palms. Feasts can no longer be a\nCtrl+T away.\n\nBut I probably won\'t. If you do, please tell me.\n======================================================================\n\n';
+var _user$project$Writing$view = function (pageName) {
+	return _elm_lang$core$Native_Utils.eq(pageName, 'stress.txt') ? _elm_lang$core$Maybe$Just(
+		A2(
+			_elm_lang$html$Html$pre,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'word-wrap', _1: 'break-word'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'pre-wrap'},
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_user$project$Writing$stress),
+				_1: {ctor: '[]'}
+			})) : _elm_lang$core$Maybe$Nothing;
+};
+
+var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress.txt)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/maplestory-lmpq-solver.html).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
 var _user$project$Main$Model = function (a) {
 	return {route: a};
 };
@@ -17679,71 +17756,51 @@ var _user$project$Main$route = function (loc) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p1 = msg;
-		if (_p1.ctor === 'UrlChange') {
+		var _p0 = msg;
+		if (_p0.ctor === 'UrlChange') {
 			return A2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
 				_elm_lang$core$Native_Utils.update(
 					model,
 					{
-						route: _user$project$Main$route(_p1._0)
+						route: _user$project$Main$route(_p0._0)
 					}),
 				{ctor: '[]'});
 		} else {
 			return {
 				ctor: '_Tuple2',
 				_0: model,
-				_1: _elm_lang$navigation$Navigation$newUrl(_p1._0)
+				_1: _elm_lang$navigation$Navigation$newUrl(_p0._0)
 			};
 		}
 	});
 var _user$project$Main$NewUrl = function (a) {
 	return {ctor: 'NewUrl', _0: a};
 };
-var _user$project$Main$customizeLink = function (inline) {
-	var _p2 = inline;
-	if (_p2.ctor === 'Link') {
-		var _p3 = _p2._0;
-		return A2(
-			_elm_lang$html$Html$a,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$href(_p3),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$title(
-						A2(_elm_lang$core$Maybe$withDefault, '', _p2._1)),
-					_1: {
-						ctor: '::',
-						_0: _user$project$Main$onPreventDefaultClick(
-							_user$project$Main$NewUrl(_p3)),
-						_1: {ctor: '[]'}
-					}
-				}
-			},
-			A2(_elm_lang$core$List$map, _user$project$Main$customizeLink, _p2._2));
-	} else {
-		return A2(
-			_pablohirafuji$elm_markdown$Markdown_Inline$defaultHtml,
-			_elm_lang$core$Maybe$Just(_user$project$Main$customizeLink),
-			inline);
-	}
-};
-var _user$project$Main$view = function (model) {
+var _user$project$Main$view = function (_p1) {
+	var _p2 = _p1;
 	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		_elm_lang$core$List$concat(
-			A2(
-				_elm_lang$core$List$map,
-				A2(
-					_pablohirafuji$elm_markdown$Markdown_Block$defaultHtml,
-					_elm_lang$core$Maybe$Nothing,
-					_elm_lang$core$Maybe$Just(_user$project$Main$customizeLink)),
-				A2(
-					_user$project$MarkdownWrapper$parseWith,
-					{softAsHardLineBreak: true, rawHtml: _pablohirafuji$elm_markdown$Markdown_Config$DontParse},
-					_user$project$Main$content))));
+		_elm_lang$html$Html$map,
+		function (msg) {
+			var _p3 = msg;
+			return _user$project$Main$NewUrl(_p3._0);
+		},
+		function () {
+			var _p4 = _p2.route;
+			switch (_p4.ctor) {
+				case 'Home':
+					return _user$project$MarkdownWrapper$viewMD(_user$project$Main$content);
+				case 'NotFound':
+					return _user$project$NotFound$view;
+				case 'Writing':
+					return A2(
+						_elm_lang$core$Maybe$withDefault,
+						_user$project$NotFound$view,
+						_user$project$Writing$view(_p4._0));
+				default:
+					return _user$project$NotFound$view;
+			}
+		}());
 };
 var _user$project$Main$UrlChange = function (a) {
 	return {ctor: 'UrlChange', _0: a};
@@ -17762,7 +17819,7 @@ var _user$project$Main$main = A2(
 			};
 		},
 		update: _user$project$Main$update,
-		subscriptions: function (_p4) {
+		subscriptions: function (_p5) {
 			return _elm_lang$core$Platform_Sub$none;
 		},
 		view: _user$project$Main$view

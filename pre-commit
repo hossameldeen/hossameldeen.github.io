@@ -9,14 +9,6 @@ if [ $RESULT -ne 0 ]; then
     exit 1
 fi
 
-(cd elm && elm-make NotFound.elm --output=../assets/gen/javascripts/elm-not-found.js)
-RESULT=$?
-if [ $RESULT -ne 0 ]; then
-    echo "failed to compile NotFound.elm"
-    exit 1
-fi
-
 git add assets/gen/javascripts/elm-main.js
-git add assets/gen/javascripts/elm-not-found.js
 
 exit 0

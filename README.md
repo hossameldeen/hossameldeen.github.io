@@ -2,14 +2,15 @@ Actually, this README is directed at me. This is a personal project and not mean
 
 Use `./sss-elm-live.sh` while developing/writing locally. When you commit `pre-commit` will run, which compiles your `Elm` code and generates the js files in `assets/gen/`.
 
-For the code structure, you're obliged to provide an `index.html` which is the page loaded when someone accesses `hossameldeen.github.io`, and `404.html` which is the page loaded when someone writes a non-existing url. Also, note that any file is accessible, so beware.
+Github pages will load `index.html` when someone accesses `hossameldeen.github.io`, and `404.html` when someone accesses a non-existing url. Also, not that any file is accessible, so beware.
 
-Currently, you have two Elm entries, one for the `index.html` and another for `404.html`. You probably change that and should make it only one that handles all urls (except files).
+You wanted to deal with everything in Elm (including urls), so you've decided to only provide `404.html`. Then, in the Elm code for the `404.html` page, you check if the url written (perhaps even just `hossameldeen.github.io`) is a valid url in the app or no. If it's not a valid url then, in Elm, you show the page that'd have been shown in a real `404.html`.  
+While testing locally, you'll need to open `404.html` instead of `/`. Github pages will handle this redirect on its servers.
 
+Yes, this has the bad side of (probably) not being indexed in search engines and (probably) not being blind-friendly, but let's hope this problem is solved when Elm does server-side rendering.
 
-Mar-19, 2017: Currently, you're thinking about understanding regular expressions https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
-Your bigger problem: clicking on links & wanting to have an Elm representation of Markdown.
-
-Now, you're thinking about using elm-tools/parser and write a simple parser for what you need & increment on it only when you need.
-
-New update: Wow, seems like `pablohirafuji` was right all along. What I probably need is to provide nicer wrapper APIs around his API (and perhaps suggest them to him if worked & came out nice). So, I'm now going back a direction or 2 to using `pablohirafuji/elm-markdown`.
+Current status: Seems like good progress. TODOs:
+- Run elm-live and see the problem.
+- `Writing` returns `Html a`, I was think it should return `Html Never`. In general, you probably need to think again of the structure of this part `|> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)`.
+- Ummm.., regarding Point-1, perhaps adding an `index.html` for the local testing would solve it?
+- You didn't implement `Code` page yet. Probably, you'll need to either port the current `lmpq-solver` page to Elm or you'll need to do something to get you of Elm and back in again.

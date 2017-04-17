@@ -1,13 +1,10 @@
-import Html exposing (Html, a, div)
-import Html.Attributes exposing (href, title)
-import Html.Events exposing (defaultOptions, onWithOptions)
-import Json.Decode
+import NotFound
+import Writing
+
+import Html exposing (Html)
 import Navigation exposing (Location)
 import UrlParser exposing (..)
-import MarkdownWrapper exposing (..)
-import Markdown.Block as MDBlock
-import Markdown.Inline as MDInline
-import Markdown.Config as MDConfig
+import MarkdownWrapper as MD
 
 
 main : Program Never Model Msg
@@ -54,40 +51,14 @@ update msg model =
 -- VIEW
 
 view : Model -> Html Msg
-view model =
-    content
-    |> parseWith {softAsHardLineBreak = True, rawHtml = MDConfig.DontParse}
-    |> List.map (MDBlock.defaultHtml Nothing (Just customizeLink))
-    |> List.concat
-    |> div []
-
-customizeLink inline =
-  case inline of
-    MDInline.Link url maybeTitle inlines ->
-      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (NewUrl url)] (List.map customizeLink inlines)
-    _ -> MDInline.defaultHtml (Just customizeLink) inline
-
-onPreventDefaultClick message =
-    onWithOptions "click"
-        { defaultOptions | preventDefault = True }
-        (preventDefault2
-            |> Json.Decode.andThen (maybePreventDefault message)
-        )
-preventDefault2 =
-    Json.Decode.map2
-        (invertedOr)
-        (Json.Decode.field "ctrlKey" Json.Decode.bool)
-        (Json.Decode.field "metaKey" Json.Decode.bool)
-maybePreventDefault msg preventDefault =
-    case preventDefault of
-        True ->
-            Json.Decode.succeed msg
-
-        False ->
-            Json.Decode.fail "Normal link"
-invertedOr : Bool -> Bool -> Bool
-invertedOr x y =
-    not (x || y)
+view {route} =
+  (case route of
+    Home -> MD.viewMD content
+    NotFound -> NotFound.view
+    Writing pageName -> Writing.view pageName |> Maybe.withDefault NotFound.view
+    Code pageName -> NotFound.view
+  )
+  |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
 
 -- CONTENT
 
