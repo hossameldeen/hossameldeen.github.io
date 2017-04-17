@@ -17597,6 +17597,12 @@ var _pablohirafuji$elm_markdown$Markdown$toHtml = F2(
 				A2(_pablohirafuji$elm_markdown$Markdown_Block$parse, maybeOptions, rawText)));
 	});
 
+var _user$project$MarkdownWrapper$parseWith = function (o) {
+	return _pablohirafuji$elm_markdown$Markdown_Block$parse(
+		_elm_lang$core$Maybe$Just(o));
+};
+var _user$project$MarkdownWrapper$parse = _pablohirafuji$elm_markdown$Markdown_Block$parse(_elm_lang$core$Maybe$Nothing);
+
 var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress.txt)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/maplestory-lmpq-solver.html).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
 var _user$project$Main$invertedOr = F2(
 	function (x, y) {
@@ -17735,9 +17741,8 @@ var _user$project$Main$view = function (model) {
 					_elm_lang$core$Maybe$Nothing,
 					_elm_lang$core$Maybe$Just(_user$project$Main$link)),
 				A2(
-					_pablohirafuji$elm_markdown$Markdown_Block$parse,
-					_elm_lang$core$Maybe$Just(
-						{softAsHardLineBreak: true, rawHtml: _pablohirafuji$elm_markdown$Markdown_Config$DontParse}),
+					_user$project$MarkdownWrapper$parseWith,
+					{softAsHardLineBreak: true, rawHtml: _pablohirafuji$elm_markdown$Markdown_Config$DontParse},
 					_user$project$Main$content))));
 };
 var _user$project$Main$UrlChange = function (a) {

@@ -2,12 +2,12 @@ import Html exposing (Html, a, div)
 import Html.Attributes exposing (href, title)
 import Html.Events exposing (defaultOptions, onWithOptions)
 import Json.Decode
-import Markdown
-import Markdown.Block
-import Markdown.Inline
-import Markdown.Config
 import Navigation exposing (Location)
 import UrlParser exposing (..)
+import MarkdownWrapper exposing (..)
+import Markdown.Block as MDBlock
+import Markdown.Inline as MDInline
+import Markdown.Config as MDConfig
 
 
 main : Program Never Model Msg
@@ -56,16 +56,16 @@ update msg model =
 view : Model -> Html Msg
 view model =
     content
-    |> Markdown.Block.parse (Just {softAsHardLineBreak = True, rawHtml = Markdown.Config.DontParse})
-    |> List.map (Markdown.Block.defaultHtml Nothing (Just link))
+    |> parseWith {softAsHardLineBreak = True, rawHtml = MDConfig.DontParse}
+    |> List.map (MDBlock.defaultHtml Nothing (Just link))
     |> List.concat
     |> div []
 
 link inline =
   case inline of
-    Markdown.Inline.Link url maybeTitle inlines ->
+    MDInline.Link url maybeTitle inlines ->
       a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (NewUrl url)] (List.map link inlines)
-    _ -> Markdown.Inline.defaultHtml (Just link) inline
+    _ -> MDInline.defaultHtml (Just link) inline
 
 onPreventDefaultClick message =
     onWithOptions "click"
