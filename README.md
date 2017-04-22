@@ -5,12 +5,12 @@ Use `./sss-elm-live.sh` while developing/writing locally. When you commit `pre-c
 Github pages will load `index.html` when someone accesses `hossameldeen.github.io`, and `404.html` when someone accesses a non-existing url. Also, not that any file is accessible, so beware.
 
 You wanted to deal with everything in Elm (including urls), so you've decided to only provide `404.html`. Then, in the Elm code for the `404.html` page, you check if the url written (perhaps even just `hossameldeen.github.io`) is a valid url in the app or no. If it's not a valid url then, in Elm, you show the page that'd have been shown in a real `404.html`.  
-While testing locally, you'll need to open `404.html` instead of `/`. Github pages will handle this redirect on its servers.
+While testing locally, you'll need to provide an `index.html` identical to `404.html` because `elm-live` opens `index.html`. Also, note that elm-live opens `index.html` on 404 errors if `--pushstate` is provided (which you've done).
 
 Yes, this has the bad side of (probably) not being indexed in search engines and (probably) not being blind-friendly, but let's hope this problem is solved when Elm does server-side rendering.
 
-Current status: Seems like good progress. TODOs:
-- Run elm-live and see the problem.
-- `Writing` returns `Html a`, I was think it should return `Html Never`. In general, you probably need to think again of the structure of this part `|> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)`.
-- Ummm.., regarding Point-1, perhaps adding an `index.html` for the local testing would solve it?
-- You didn't implement `Code` page yet. Probably, you'll need to either port the current `lmpq-solver` page to Elm or you'll need to do something to get you of Elm and back in again.
+Current status:
+- Implementing `Code` in Elm, you're trying to rewrite as little as possible to try the heroic act of embedding HTML/CSS/JS in Elm.
+- Run `elm-live` and see the problem. You have a problem with `addListener`.
+- The place of `addListener` in the code is a hack. Seems like you have no guarantee on the order of creating/appending the DOM nodes. So, when you put it elsewhere it got a `null` error.
+- An idea to see if there's a way in Elm to know when an Html got rendered and make a port for that event.

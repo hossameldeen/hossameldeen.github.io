@@ -1,5 +1,6 @@
 import NotFound
 import Writing
+import Code
 
 import Html exposing (Html)
 import Navigation exposing (Location)
@@ -52,13 +53,12 @@ update msg model =
 
 view : Model -> Html Msg
 view {route} =
-  (case route of
-    Home -> MD.viewMD content
-    NotFound -> NotFound.view
-    Writing pageName -> Writing.view pageName |> Maybe.withDefault NotFound.view
-    Code pageName -> NotFound.view
-  )
-  |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
+  case route of
+    Home -> MD.viewMD content |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
+    NotFound -> NotFound.view |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
+    Writing pageName -> Writing.view pageName |> Maybe.withDefault NotFound.view |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
+    Code pageName -> Code.view pageName |> Maybe.withDefault NotFound.view |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
+
 
 -- CONTENT
 
@@ -71,11 +71,11 @@ Use at your own risk.
 
 ## Writing
 
-- [Stress](/writing/stress.txt)
+- [Stress](/writing/stress)
 
 ## Code
 
-- [Maplestory Ludimaze PQ Solver](/maplestory-lmpq-solver.html).
+- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver).
 Please, note that I don't endorse Maplestory in anyway whatsoever. I
 haven't played it in long time.
 

@@ -17597,6 +17597,185 @@ var _pablohirafuji$elm_markdown$Markdown$toHtml = F2(
 				A2(_pablohirafuji$elm_markdown$Markdown_Block$parse, maybeOptions, rawText)));
 	});
 
+var _user$project$Code$script = A3(
+	_elm_lang$html$Html$node,
+	'script',
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('\n  function solve(src, dest) {\n\n    const steps = [ 4,   7,   -3],\n          names = [\'L\', \'M\', \'R\'],\n          nRooms = 16;\n\n    --src; --dest;\n\n    var Q = [[src, []]];\n\n    var nIterations = 0;\n\n    while(Q.length > 0) {\n\n      var curRoom = Q[0][0], curPath = Q[0][1];\n      Q.shift();\n      console.log(curRoom);\n      if (curRoom == dest) return curPath;\n\n      for (var i = 0; i < steps.length; ++i) {\n        var newRoom = (curRoom + steps[i] + nRooms - 1) % (nRooms - 1);\n        if ((curRoom === 8 || curRoom === 15) && names[i] === \'M\')\n          newRoom = 15 + 8 - curRoom;\n\n        Q.push([newRoom, curPath.concat(names[i])]);\n      }\n\n      ++nIterations;\n      if (nIterations > 1000000) {\n        return \"Took too long to calculate it. A bug on my side.\"\n      }\n\n    }\n\n    return \"Found no path. A bug on my side.\";\n  }\n\n  function update() {\n    var src = parseInt(document.getElementById(\"src\").value),\n        dest = parseInt(document.getElementById(\"dest\").value);\n    var sol = document.getElementById(\"sol\");\n\n    sol.innerHTML = \"\";\n\n    if (isNaN(src) || isNaN(dest) || src < 1 || src > 16 || dest < 1 || dest > 16) {\n      sol.innerHTML = \"Please, make sure both rooms are in the range [1-16].\"\n      return;\n    }\n\n    var minPath = solve(src, dest);\n\n    sol.innerHTML = minPath.length == 0 ? \"You\'re already there\" : minPath;\n  }\n'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Code$addListener = function (id) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'script',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'\n  // To add the event listeners\n  (function() {\n    document.getElementById(\"\n',
+					A2(_elm_lang$core$Basics_ops['++'], id, '\n\").addEventListener(\"input\", function(e) {update(); console.log(\"hi\")});\n  })();\n'))),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Code$view = function (pageName) {
+	return _elm_lang$core$Native_Utils.eq(pageName, 'maplestory-lmpq-solver') ? _elm_lang$core$Maybe$Just(
+		A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'font-size', _1: '26px'},
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _user$project$Code$script,
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: A2(_elm_lang$html$Html_Attributes$attribute, 'type', 'number'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$id('src'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('Your Room'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$style(
+													{
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'font-size', _1: '26px'},
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _user$project$Code$addListener('src'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: A2(_elm_lang$html$Html_Attributes$attribute, 'type', 'number'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$id('dest'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$placeholder('Goal Room'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$style(
+															{
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'font-size', _1: '26px'},
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _user$project$Code$addListener('dest'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$b,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$div,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$id('sol'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$style(
+																		{
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline'},
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('To find the shortest path between 2 rooms in Ludi maze PQ, enter their numbers above (e.g, 3 and 8)'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			})) : _elm_lang$core$Maybe$Nothing;
+};
+
 var _user$project$MarkdownWrapper$invertedOr = F2(
 	function (x, y) {
 		return !(x || y);
@@ -17686,7 +17865,7 @@ var _user$project$NotFound$view = _user$project$MarkdownWrapper$viewMD(_user$pro
 
 var _user$project$Writing$stress = '\nStress\n======\n\nComputers, TV and books are very stressful to me.\n\nDid you ever try to study with a feast right outside your room? Or\neven worse, a Ctrl+T away? And not only that, but also an ever-\nchanging feast only the knowing of which thristens and satisfies your\ncuriosity. That\'s what dealing with computers is like.\n\nComputers are these great, really great simulators. Want to be in war?\n... What a breeze. Want to sit with the funniest people on Earth? ...\nNo problem.\n\nSo are the TV and books. Only less interactive, with less control on\nthem, and more clumsy.\n\nBut does that render them purely evil?\n\nThe real world doesn\'t happen in books. It happens out there. On the\nstreet outside your apartment. That\'s what you should be interacting\nwith, that\'s what you should be a master in dealing with.\n\nBut again, does this render the subjects useless?\n\nEvery culture is rich in some ideas and poor in others. I forgot the\ncount of acquaintances who see nothing wrong with staring. With apply-\ning an X-ray scan with their eyes on anyone walking on the streets. To\nyou of my acquaintances, *this is not okay!*\n\nSame goes for a community that has never heard of sada2a, that has\nnever heard of feeding a traveller, \"son of the road\" as we call in\nArabic.\n\nSo, these people, perhaps they would never get in touch with such\nideas except through a simulation of lives outside theirs, out their\nstreets.\n\nSo, computers are what computers are. They are useful, they are handy.\nBut it\'s not right obe able to feast 24/7 with only a click away. This\nmakes me *very* stressed. Books are no different, but they\'re more\nscarce and more clumsy.\n\nProbably, in order for computers to be less stressful to me, I need to\nfind a way to make it harder to access the feast within it. I need to\nseparate between its feasts and its palms. Feasts can no longer be a\nCtrl+T away.\n\nBut I probably won\'t. If you do, please tell me.\n======================================================================\n\n';
 var _user$project$Writing$view = function (pageName) {
-	return _elm_lang$core$Native_Utils.eq(pageName, 'stress.txt') ? _elm_lang$core$Maybe$Just(
+	return _elm_lang$core$Native_Utils.eq(pageName, 'stress') ? _elm_lang$core$Maybe$Just(
 		A2(
 			_elm_lang$html$Html$pre,
 			{
@@ -17710,7 +17889,7 @@ var _user$project$Writing$view = function (pageName) {
 			})) : _elm_lang$core$Maybe$Nothing;
 };
 
-var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress.txt)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/maplestory-lmpq-solver.html).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
+var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
 var _user$project$Main$Model = function (a) {
 	return {route: a};
 };
@@ -17779,28 +17958,47 @@ var _user$project$Main$NewUrl = function (a) {
 };
 var _user$project$Main$view = function (_p1) {
 	var _p2 = _p1;
-	return A2(
-		_elm_lang$html$Html$map,
-		function (msg) {
-			var _p3 = msg;
-			return _user$project$Main$NewUrl(_p3._0);
-		},
-		function () {
-			var _p4 = _p2.route;
-			switch (_p4.ctor) {
-				case 'Home':
-					return _user$project$MarkdownWrapper$viewMD(_user$project$Main$content);
-				case 'NotFound':
-					return _user$project$NotFound$view;
-				case 'Writing':
-					return A2(
-						_elm_lang$core$Maybe$withDefault,
-						_user$project$NotFound$view,
-						_user$project$Writing$view(_p4._0));
-				default:
-					return _user$project$NotFound$view;
-			}
-		}());
+	var _p3 = _p2.route;
+	switch (_p3.ctor) {
+		case 'Home':
+			return A2(
+				_elm_lang$html$Html$map,
+				function (msg) {
+					var _p4 = msg;
+					return _user$project$Main$NewUrl(_p4._0);
+				},
+				_user$project$MarkdownWrapper$viewMD(_user$project$Main$content));
+		case 'NotFound':
+			return A2(
+				_elm_lang$html$Html$map,
+				function (msg) {
+					var _p5 = msg;
+					return _user$project$Main$NewUrl(_p5._0);
+				},
+				_user$project$NotFound$view);
+		case 'Writing':
+			return A2(
+				_elm_lang$html$Html$map,
+				function (msg) {
+					var _p6 = msg;
+					return _user$project$Main$NewUrl(_p6._0);
+				},
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					_user$project$NotFound$view,
+					_user$project$Writing$view(_p3._0)));
+		default:
+			return A2(
+				_elm_lang$html$Html$map,
+				function (msg) {
+					var _p7 = msg;
+					return _user$project$Main$NewUrl(_p7._0);
+				},
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					_user$project$NotFound$view,
+					_user$project$Code$view(_p3._0)));
+	}
 };
 var _user$project$Main$UrlChange = function (a) {
 	return {ctor: 'UrlChange', _0: a};
@@ -17819,7 +18017,7 @@ var _user$project$Main$main = A2(
 			};
 		},
 		update: _user$project$Main$update,
-		subscriptions: function (_p5) {
+		subscriptions: function (_p8) {
 			return _elm_lang$core$Platform_Sub$none;
 		},
 		view: _user$project$Main$view

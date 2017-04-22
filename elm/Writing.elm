@@ -6,9 +6,10 @@ import MarkdownWrapper as MD
 
 -- VIEW
 
+-- TODO: I want this to return Html Never
 view : String -> Maybe (Html a)
 view pageName =
-  if pageName == "stress.txt" then
+  if pageName == "stress" then
     -- Taken from opening a .txt file in Chrome & Insepcting the style.
     pre [style [("word-wrap", "break-word"), ("white-space", "pre-wrap")]] [text stress] |> Just
   else
