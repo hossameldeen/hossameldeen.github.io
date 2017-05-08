@@ -1,7 +1,7 @@
 -- A nicer API around pablohirafuji/elm-markdown
 
 
-module MarkdownWrapper exposing (viewMD, Msg(..))
+module MarkdownWrapper exposing (viewMD)
 
 import Html exposing (Html, a, div)
 import Html.Attributes exposing (href, title)
@@ -11,10 +11,11 @@ import Markdown as MD
 import Markdown.Block as MDBlock
 import Markdown.Inline as MDInline
 import Markdown.Config as MDConfig
+import Routing
 
-type Msg = NewUrl String
-
-viewMD : String -> Html Msg
+-- Not worth making a new Msg type since it only emits Link msgs. And if this changes in the future, refactoring is
+-- advertised as something safe in Elm.
+viewMD : String -> Html Routing.Msg
 viewMD content =
     content
     |> parseWith {softAsHardLineBreak = True, rawHtml = MDConfig.DontParse}
@@ -31,7 +32,7 @@ parseWith o = MDBlock.parse (Just o)
 customizeLink inline =
   case inline of
     MDInline.Link url maybeTitle inlines ->
-      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (NewUrl url)] (List.map customizeLink inlines)
+      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (Routing.NewUrl url)] (List.map customizeLink inlines)
     _ -> MDInline.defaultHtml (Just customizeLink) inline
 
 onPreventDefaultClick message =

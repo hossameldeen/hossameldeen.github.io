@@ -1,19 +1,25 @@
-module Writing exposing (view)
+module Writing exposing (route, Route, view)
 
 import Html exposing (Html, pre, text)
 import Html.Attributes exposing (style)
+import UrlParser exposing (..)
 import MarkdownWrapper as MD
+import Routing
+
+route =
+  oneOf
+    [ map (Routing.Elm Stress) (s "stress")
+    ]
 
 -- VIEW
 
--- TODO: I want this to return Html Never
-view : String -> Maybe (Html a)
-view pageName =
-  if pageName == "stress" then
-    -- Taken from opening a .txt file in Chrome & Insepcting the style.
-    pre [style [("word-wrap", "break-word"), ("white-space", "pre-wrap")]] [text stress] |> Just
-  else
-    Nothing
+type alias Model = { route : Route }
+
+type Route = Stress
+
+view model =
+  case model.route of
+    Stress -> pre [style [("word-wrap", "break-word"), ("white-space", "pre-wrap")]] [text stress]
 
 
 -- CONTENT

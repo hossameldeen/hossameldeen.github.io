@@ -2,10 +2,11 @@ module NotFound exposing (view)
 
 import Html exposing (Html)
 import MarkdownWrapper as MD
+import Routing
 
 -- VIEW
 
-view : Html MD.Msg
+view : Html Routing.Msg
 view =
   MD.viewMD content
 

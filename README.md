@@ -10,7 +10,5 @@ While testing locally, you'll need to provide an `index.html` identical to `404.
 Yes, this has the bad side of (probably) not being indexed in search engines and (probably) not being blind-friendly, but let's hope this problem is solved when Elm does server-side rendering.
 
 Current status:
-- Implementing `Code` in Elm, you're trying to rewrite as little as possible to try the heroic act of embedding HTML/CSS/JS in Elm.
-- Run `elm-live` and see the problem. You have a problem with `addListener`.
-- The place of `addListener` in the code is a hack. Seems like you have no guarantee on the order of creating/appending the DOM nodes. So, when you put it elsewhere it got a `null` error.
-- An idea to see if there's a way in Elm to know when an Html got rendered and make a port for that event.
+- Routing architecture seems good. But still may need a very little cleanup.
+- Run `./sss-elm-live` to see what the current problem is. It's with loading an external url.

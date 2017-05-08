@@ -3,14 +3,16 @@ import Writing
 import Code
 
 import Html exposing (Html)
-import Navigation exposing (Location)
+import Navigation
 import UrlParser exposing (..)
 import MarkdownWrapper as MD
+import Routing
+import Crash
 
 
-main : Program Never Model Msg
+main : Program Never Model Routing.Msg
 main =
-  Navigation.program UrlChange
+  Navigation.program Routing.UrlChange
     { init =  (\loc -> ({route = route loc}, Cmd.none))
     , update = update
     , subscriptions = (\_ -> Sub.none)
@@ -20,45 +22,46 @@ main =
 -- MODEL
 
 type alias Model =
-    { route : Route
-    }
+  { route : Routing.Result Route
+  }
 
-type Route = Home | NotFound | Writing String | Code String
+type Route = Home | NotFound | Writing Writing.Route | Code Code.Route
 
+route : Navigation.Location -> Routing.Result Route
 route loc =
   ((oneOf
-    [ map Home top
-    , map Writing (s "writing" </> string)
-    , map Code (s "code" </> string)
+    [ map (Routing.Elm Home) top
+    , map (Routing.compose "writing" Writing) (s "writing" </> Writing.route)
+    , map (Routing.compose "code" Code) (s "code" </> Code.route)
     ]
-  |> parsePath) <| loc) |> Maybe.withDefault NotFound
+  |> parsePath) <| loc) |> Maybe.withDefault (Routing.Elm NotFound)
 
 
 
 -- UPDATE
 
-type Msg = UrlChange Navigation.Location
-         | NewUrl String
-
-update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    UrlChange loc ->
-      {model | route = route loc} ! []
-    NewUrl s ->
+    Routing.UrlChange loc -> case route loc of
+      Routing.Elm route -> { model | route = Routing.Elm route } ! []
+      Routing.NonElm url _ -> (model, Navigation.load url)
+    Routing.NewUrl s ->
       (model, Navigation.newUrl s)
 
 
 -- VIEW
 
-view : Model -> Html Msg
+view : Model -> Html Routing.Msg
 view {route} =
   case route of
-    Home -> MD.viewMD content |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
-    NotFound -> NotFound.view |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
-    Writing pageName -> Writing.view pageName |> Maybe.withDefault NotFound.view |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
-    Code pageName -> Code.view pageName |> Maybe.withDefault NotFound.view |> Html.map (\msg -> case msg of MD.NewUrl s -> NewUrl s)
+    Routing.Elm Home -> MD.viewMD content
+    Routing.Elm NotFound -> NotFound.view
+    Routing.Elm (Writing route) -> Writing.view {route = route}
+    Routing.Elm (Code route) -> Code.view {route = route}
+    Routing.NonElm _ _ ->  Crash.view
 
+viewHome dontCare =
+  MD.viewMD content
 
 -- CONTENT
 

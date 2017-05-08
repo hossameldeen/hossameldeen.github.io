@@ -1,4 +1,1 @@
-var app = Elm.Main.fullscreen();
-app.ports.title.subscribe(function(title) {
-    document.title = title;
-});
+var app = Elm.Main.embed(document.body);
