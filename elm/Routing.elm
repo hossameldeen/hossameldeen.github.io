@@ -16,4 +16,4 @@ compose : String -> (a -> b) -> Result a -> Result b
 compose parent constructor result =
   case result of
     Elm route -> Elm (constructor route)
-    NonElm url isRelative -> NonElm (if isRelative then parent ++ "/" ++ url else url) isRelative
+    NonElm url isRelative -> NonElm (if isRelative then url else url) isRelative

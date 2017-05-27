@@ -8,7 +8,7 @@ import Crash
 
 route =
   oneOf
-    [ map (Routing.NonElm "maplestory-lmpq-solver" True) (s "maplestory-lmpq-solver")
+    [ map (Routing.NonElm "maplestory-lmpq-solver.html" True) (s "maplestory-lmpq-solver")
     ]
 
 type Route = SHOULDNTBEUSED

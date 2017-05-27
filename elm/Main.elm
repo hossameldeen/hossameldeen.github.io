@@ -2,18 +2,20 @@ import NotFound
 import Writing
 import Code
 
-import Html exposing (Html)
-import Navigation
-import UrlParser exposing (..)
 import MarkdownWrapper as MD
 import Routing
 import Crash
+
+import Html exposing (Html)
+import Navigation
+import UrlParser exposing (..)
+import List.Nonempty as NE exposing (Nonempty, (:::))
 
 
 main : Program Never Model Routing.Msg
 main =
   Navigation.program Routing.UrlChange
-    { init =  (\loc -> ({route = route loc}, Cmd.none))
+    { init =  (\loc -> update (Routing.UrlChange loc) {route = route loc, history = NE.fromElement loc}) -- Yeah, not so clean
     , update = update
     , subscriptions = (\_ -> Sub.none)
     , view = view
@@ -23,30 +25,35 @@ main =
 
 type alias Model =
   { route : Routing.Result Route
+  , history : Nonempty Navigation.Location
   }
 
 type Route = Home | NotFound | Writing Writing.Route | Code Code.Route
 
 route : Navigation.Location -> Routing.Result Route
 route loc =
-  ((oneOf
-    [ map (Routing.Elm Home) top
-    , map (Routing.compose "writing" Writing) (s "writing" </> Writing.route)
-    , map (Routing.compose "code" Code) (s "code" </> Code.route)
-    ]
-  |> parsePath) <| loc) |> Maybe.withDefault (Routing.Elm NotFound)
+  let
+    parser =
+      oneOf
+        [ map (Routing.Elm Home) top
+        , map (Routing.compose "writing" Writing) (s "writing" </> Writing.route)
+        , map (Routing.compose "code" Code) (s "code" </> Code.route)
+        ]
+    routeResult = parsePath parser loc |> Maybe.withDefault (Routing.Elm NotFound)
+  in
+    Debug.log "hamada" routeResult
 
 
 
 -- UPDATE
 
 update msg model =
-  case msg of
-    Routing.UrlChange loc -> case route loc of
-      Routing.Elm route -> { model | route = Routing.Elm route } ! []
-      Routing.NonElm url _ -> (model, Navigation.load url)
+  case Debug.log "hi" msg of
+    Routing.UrlChange loc -> if loc == NE.head model.history then model ! [] else case route loc of
+      Routing.Elm route -> { model | route = Routing.Elm route, history = loc ::: model.history } ! [Navigation.newUrl loc.href]
+      Routing.NonElm url _ -> model ! [Navigation.load url]
     Routing.NewUrl s ->
-      (model, Navigation.newUrl s)
+      (model, Navigation.modifyUrl s)
 
 
 -- VIEW
@@ -74,7 +81,7 @@ Use at your own risk.
 
 ## Writing
 
-- [Stress](/writing/stress)
+- [Stress](https://google.com/writing/stress)
 
 ## Code
 
