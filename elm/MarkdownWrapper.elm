@@ -15,7 +15,7 @@ import Routing
 
 -- Not worth making a new Msg type since it only emits Link msgs. And if this changes in the future, refactoring is
 -- advertised as something safe in Elm.
-viewMD : String -> Html Routing.Msg
+viewMD : String -> Html (Routing.Msg)
 viewMD content =
     content
     |> parseWith {softAsHardLineBreak = True, rawHtml = MDConfig.DontParse}

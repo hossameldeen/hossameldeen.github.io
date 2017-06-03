@@ -18416,6 +18416,84 @@ var _pablohirafuji$elm_markdown$Markdown$toHtml = F2(
 				A2(_pablohirafuji$elm_markdown$Markdown_Block$parse, maybeOptions, rawText)));
 	});
 
+var _user$project$Routing$decodeUrl = _elm_lang$core$Native_Platform.outgoingPort(
+	'decodeUrl',
+	function (v) {
+		return v;
+	});
+var _user$project$Routing$onUrlDecoded = _elm_lang$core$Native_Platform.incomingPort(
+	'onUrlDecoded',
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (x0) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (x1) {
+					return _elm_lang$core$Json_Decode$succeed(
+						{ctor: '_Tuple2', _0: x0, _1: x1});
+				},
+				A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$string));
+		},
+		A2(
+			_elm_lang$core$Json_Decode$index,
+			0,
+			A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (href) {
+					return A2(
+						_elm_lang$core$Json_Decode$andThen,
+						function (host) {
+							return A2(
+								_elm_lang$core$Json_Decode$andThen,
+								function (hostname) {
+									return A2(
+										_elm_lang$core$Json_Decode$andThen,
+										function (protocol) {
+											return A2(
+												_elm_lang$core$Json_Decode$andThen,
+												function (origin) {
+													return A2(
+														_elm_lang$core$Json_Decode$andThen,
+														function (port_) {
+															return A2(
+																_elm_lang$core$Json_Decode$andThen,
+																function (pathname) {
+																	return A2(
+																		_elm_lang$core$Json_Decode$andThen,
+																		function (search) {
+																			return A2(
+																				_elm_lang$core$Json_Decode$andThen,
+																				function (hash) {
+																					return A2(
+																						_elm_lang$core$Json_Decode$andThen,
+																						function (username) {
+																							return A2(
+																								_elm_lang$core$Json_Decode$andThen,
+																								function (password) {
+																									return _elm_lang$core$Json_Decode$succeed(
+																										{href: href, host: host, hostname: hostname, protocol: protocol, origin: origin, port_: port_, pathname: pathname, search: search, hash: hash, username: username, password: password});
+																								},
+																								A2(_elm_lang$core$Json_Decode$field, 'password', _elm_lang$core$Json_Decode$string));
+																						},
+																						A2(_elm_lang$core$Json_Decode$field, 'username', _elm_lang$core$Json_Decode$string));
+																				},
+																				A2(_elm_lang$core$Json_Decode$field, 'hash', _elm_lang$core$Json_Decode$string));
+																		},
+																		A2(_elm_lang$core$Json_Decode$field, 'search', _elm_lang$core$Json_Decode$string));
+																},
+																A2(_elm_lang$core$Json_Decode$field, 'pathname', _elm_lang$core$Json_Decode$string));
+														},
+														A2(_elm_lang$core$Json_Decode$field, 'port_', _elm_lang$core$Json_Decode$string));
+												},
+												A2(_elm_lang$core$Json_Decode$field, 'origin', _elm_lang$core$Json_Decode$string));
+										},
+										A2(_elm_lang$core$Json_Decode$field, 'protocol', _elm_lang$core$Json_Decode$string));
+								},
+								A2(_elm_lang$core$Json_Decode$field, 'hostname', _elm_lang$core$Json_Decode$string));
+						},
+						A2(_elm_lang$core$Json_Decode$field, 'host', _elm_lang$core$Json_Decode$string));
+				},
+				A2(_elm_lang$core$Json_Decode$field, 'href', _elm_lang$core$Json_Decode$string)))));
 var _user$project$Routing$NonElm = F2(
 	function (a, b) {
 		return {ctor: 'NonElm', _0: a, _1: b};
@@ -18434,10 +18512,16 @@ var _user$project$Routing$compose = F3(
 			var _p1 = _p0._1;
 			return A2(
 				_user$project$Routing$NonElm,
-				_p1 ? _p2 : _p2,
+				_p1 ? A2(
+					_elm_lang$core$Basics_ops['++'],
+					parent,
+					A2(_elm_lang$core$Basics_ops['++'], '/', _p2)) : _p2,
 				_p1);
 		}
 	});
+var _user$project$Routing$UrlDecoded = function (a) {
+	return {ctor: 'UrlDecoded', _0: a};
+};
 var _user$project$Routing$NewUrl = function (a) {
 	return {ctor: 'NewUrl', _0: a};
 };
@@ -18589,34 +18673,35 @@ var _user$project$Writing$route = _evancz$url_parser$UrlParser$oneOf(
 		_1: {ctor: '[]'}
 	});
 
-var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](https://google.com/writing/stress)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
+var _user$project$Ports$dummyPort = _elm_lang$core$Native_Platform.outgoingPort(
+	'dummyPort',
+	function (v) {
+		return v;
+	});
+
+var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
 var _user$project$Main$viewHome = function (dontCare) {
 	return _user$project$MarkdownWrapper$viewMD(_user$project$Main$content);
 };
 var _user$project$Main$view = function (_p0) {
 	var _p1 = _p0;
 	var _p2 = _p1.route;
-	if (_p2.ctor === 'Elm') {
-		switch (_p2._0.ctor) {
-			case 'Home':
-				return _user$project$MarkdownWrapper$viewMD(_user$project$Main$content);
-			case 'NotFound':
-				return _user$project$NotFound$view;
-			case 'Writing':
-				return _user$project$Writing$view(
-					{route: _p2._0._0});
-			default:
-				return _user$project$Code$view(
-					{route: _p2._0._0});
-		}
-	} else {
-		return _user$project$Crash$view;
+	switch (_p2.ctor) {
+		case 'Home':
+			return _user$project$MarkdownWrapper$viewMD(_user$project$Main$content);
+		case 'NotFound':
+			return _user$project$NotFound$view;
+		case 'Writing':
+			return _user$project$Writing$view(
+				{route: _p2._0});
+		default:
+			return _user$project$Code$view(
+				{route: _p2._0});
 	}
 };
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {route: a, history: b};
-	});
+var _user$project$Main$Model = function (a) {
+	return {route: a};
+};
 var _user$project$Main$Code = function (a) {
 	return {ctor: 'Code', _0: a};
 };
@@ -18625,87 +18710,134 @@ var _user$project$Main$Writing = function (a) {
 };
 var _user$project$Main$NotFound = {ctor: 'NotFound'};
 var _user$project$Main$Home = {ctor: 'Home'};
-var _user$project$Main$route = function (loc) {
-	var parser = _evancz$url_parser$UrlParser$oneOf(
-		{
+var _user$project$Main$route = _evancz$url_parser$UrlParser$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_evancz$url_parser$UrlParser$map,
+			_user$project$Routing$Elm(_user$project$Main$Home),
+			_evancz$url_parser$UrlParser$top),
+		_1: {
 			ctor: '::',
 			_0: A2(
 				_evancz$url_parser$UrlParser$map,
-				_user$project$Routing$Elm(_user$project$Main$Home),
-				_evancz$url_parser$UrlParser$top),
+				A2(_user$project$Routing$compose, 'writing', _user$project$Main$Writing),
+				A2(
+					_evancz$url_parser$UrlParser_ops['</>'],
+					_evancz$url_parser$UrlParser$s('writing'),
+					_user$project$Writing$route)),
 			_1: {
 				ctor: '::',
 				_0: A2(
 					_evancz$url_parser$UrlParser$map,
-					A2(_user$project$Routing$compose, 'writing', _user$project$Main$Writing),
+					A2(_user$project$Routing$compose, 'code', _user$project$Main$Code),
 					A2(
 						_evancz$url_parser$UrlParser_ops['</>'],
-						_evancz$url_parser$UrlParser$s('writing'),
-						_user$project$Writing$route)),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_evancz$url_parser$UrlParser$map,
-						A2(_user$project$Routing$compose, 'code', _user$project$Main$Code),
-						A2(
-							_evancz$url_parser$UrlParser_ops['</>'],
-							_evancz$url_parser$UrlParser$s('code'),
-							_user$project$Code$route)),
-					_1: {ctor: '[]'}
-				}
+						_evancz$url_parser$UrlParser$s('code'),
+						_user$project$Code$route)),
+				_1: {ctor: '[]'}
 			}
-		});
-	var routeResult = A2(
-		_elm_lang$core$Maybe$withDefault,
-		_user$project$Routing$Elm(_user$project$Main$NotFound),
-		A2(_evancz$url_parser$UrlParser$parsePath, parser, loc));
-	return A2(_elm_lang$core$Debug$log, 'hamada', routeResult);
-};
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		var _p3 = A2(_elm_lang$core$Debug$log, 'hi', msg);
-		if (_p3.ctor === 'UrlChange') {
-			var _p5 = _p3._0;
-			if (_elm_lang$core$Native_Utils.eq(
-				_p5,
-				_mgold$elm_nonempty_list$List_Nonempty$head(model.history))) {
+		}
+	});
+var _user$project$Main$urlChange = F2(
+	function (loc, model) {
+		var _p3 = A2(
+			_elm_lang$core$Debug$log,
+			'hamada',
+			A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc));
+		if (_p3.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{route: _user$project$Main$NotFound}),
+				{ctor: '[]'});
+		} else {
+			var _p4 = _p3._0;
+			if (_p4.ctor === 'Elm') {
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{route: _p4._0}),
+					{ctor: '[]'});
+			} else {
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
-					{ctor: '[]'});
-			} else {
-				var _p4 = _user$project$Main$route(_p5);
-				if (_p4.ctor === 'Elm') {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								route: _user$project$Routing$Elm(_p4._0),
-								history: A2(_mgold$elm_nonempty_list$List_Nonempty_ops[':::'], _p5, model.history)
-							}),
-						{
-							ctor: '::',
-							_0: _elm_lang$navigation$Navigation$newUrl(_p5.href),
-							_1: {ctor: '[]'}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
-						{
-							ctor: '::',
-							_0: _elm_lang$navigation$Navigation$load(_p4._0),
-							_1: {ctor: '[]'}
-						});
-				}
+					{
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$load(_p4._0),
+						_1: {ctor: '[]'}
+					});
 			}
+		}
+	});
+var _user$project$Main$urlChange2 = F2(
+	function (loc, model) {
+		var _p5 = A2(
+			_elm_lang$core$Debug$log,
+			'hamada2',
+			A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc));
+		if (_p5.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{route: _user$project$Main$NotFound}),
+				{ctor: '[]'});
 		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: model,
-				_1: _elm_lang$navigation$Navigation$modifyUrl(_p3._0)
-			};
+			var _p6 = _p5._0;
+			if (_p6.ctor === 'Elm') {
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{route: _p6._0}),
+					{
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$newUrl(loc.href),
+						_1: {ctor: '[]'}
+					});
+			} else {
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$load(_p6._0),
+						_1: {ctor: '[]'}
+					});
+			}
+		}
+	});
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p7 = A2(_elm_lang$core$Debug$log, 'update of main:', msg);
+		switch (_p7.ctor) {
+			case 'NewUrl':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Routing$decodeUrl(_p7._0)
+				};
+			case 'UrlDecoded':
+				var _p8 = _p7._0._0;
+				return A2(
+					_elm_lang$core$Debug$log,
+					'comp res',
+					!_elm_lang$core$Native_Utils.eq(
+						A2(_elm_lang$core$Debug$log, 'left', _p7._0._1),
+						A2(_elm_lang$core$Debug$log, 'right', _p8.origin))) ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$load(_p8.href),
+						_1: {ctor: '[]'}
+					}) : A2(_user$project$Main$urlChange2, _p8, model);
+			default:
+				return A2(_user$project$Main$urlChange, _p7._0, model);
 		}
 	});
 var _user$project$Main$main = A2(
@@ -18716,14 +18848,11 @@ var _user$project$Main$main = A2(
 			return A2(
 				_user$project$Main$update,
 				_user$project$Routing$UrlChange(loc),
-				{
-					route: _user$project$Main$route(loc),
-					history: _mgold$elm_nonempty_list$List_Nonempty$fromElement(loc)
-				});
+				{route: _user$project$Main$Home});
 		},
 		update: _user$project$Main$update,
-		subscriptions: function (_p6) {
-			return _elm_lang$core$Platform_Sub$none;
+		subscriptions: function (_p9) {
+			return _user$project$Routing$onUrlDecoded(_user$project$Routing$UrlDecoded);
 		},
 		view: _user$project$Main$view
 	})();

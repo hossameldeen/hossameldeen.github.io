@@ -10,50 +10,58 @@ import Html exposing (Html)
 import Navigation
 import UrlParser exposing (..)
 import List.Nonempty as NE exposing (Nonempty, (:::))
+import Ports
 
 
 main : Program Never Model Routing.Msg
 main =
   Navigation.program Routing.UrlChange
-    { init =  (\loc -> update (Routing.UrlChange loc) {route = route loc, history = NE.fromElement loc}) -- Yeah, not so clean
+    { init =  (\loc -> update (Routing.UrlChange loc) {route = Home})
     , update = update
-    , subscriptions = (\_ -> Sub.none)
+    , subscriptions = (\_ -> Routing.onUrlDecoded Routing.UrlDecoded)
     , view = view
     }
 
 -- MODEL
 
 type alias Model =
-  { route : Routing.Result Route
-  , history : Nonempty Navigation.Location
+  { route : Route
   }
 
 type Route = Home | NotFound | Writing Writing.Route | Code Code.Route
 
-route : Navigation.Location -> Routing.Result Route
-route loc =
-  let
-    parser =
-      oneOf
-        [ map (Routing.Elm Home) top
-        , map (Routing.compose "writing" Writing) (s "writing" </> Writing.route)
-        , map (Routing.compose "code" Code) (s "code" </> Code.route)
-        ]
-    routeResult = parsePath parser loc |> Maybe.withDefault (Routing.Elm NotFound)
-  in
-    Debug.log "hamada" routeResult
-
+route =
+  oneOf
+    [ map (Routing.Elm Home) top
+    , map (Routing.compose "writing" Writing) (s "writing" </> Writing.route)
+    , map (Routing.compose "code" Code) (s "code" </> Code.route)
+    ]
 
 
 -- UPDATE
 
 update msg model =
-  case Debug.log "hi" msg of
-    Routing.UrlChange loc -> if loc == NE.head model.history then model ! [] else case route loc of
-      Routing.Elm route -> { model | route = Routing.Elm route, history = loc ::: model.history } ! [Navigation.newUrl loc.href]
-      Routing.NonElm url _ -> model ! [Navigation.load url]
-    Routing.NewUrl s ->
-      (model, Navigation.modifyUrl s)
+  case Debug.log "update of main:" msg of
+    Routing.NewUrl s -> (model, Routing.decodeUrl s)
+    Routing.UrlDecoded (loc, origin) ->
+      if Debug.log "comp res" ((Debug.log "left" origin) /= (Debug.log "right" loc.origin)) then model ! [Navigation.load loc.href] else urlChange2 loc model
+    Routing.UrlChange loc -> urlChange loc model
+
+urlChange loc model =
+  case Debug.log "hamada" (parsePath route loc) of
+    Nothing -> { model | route = NotFound } ! []
+    Just res ->
+      case res of
+        Routing.Elm route -> { model | route = route } ! []
+        Routing.NonElm url _ -> model ! [Navigation.load url]
+
+urlChange2 loc model =
+  case Debug.log "hamada2" (parsePath route loc) of
+    Nothing -> { model | route = NotFound } ! []
+    Just res ->
+      case res of
+        Routing.Elm route -> { model | route = route } ! [Navigation.newUrl loc.href]
+        Routing.NonElm url _ -> model ! [Navigation.load url]
 
 
 -- VIEW
@@ -61,11 +69,10 @@ update msg model =
 view : Model -> Html Routing.Msg
 view {route} =
   case route of
-    Routing.Elm Home -> MD.viewMD content
-    Routing.Elm NotFound -> NotFound.view
-    Routing.Elm (Writing route) -> Writing.view {route = route}
-    Routing.Elm (Code route) -> Code.view {route = route}
-    Routing.NonElm _ _ ->  Crash.view
+    Home -> MD.viewMD content
+    NotFound -> NotFound.view
+    (Writing route) -> Writing.view {route = route}
+    (Code route) -> Code.view {route = route}
 
 viewHome dontCare =
   MD.viewMD content
@@ -81,7 +88,7 @@ Use at your own risk.
 
 ## Writing
 
-- [Stress](https://google.com/writing/stress)
+- [Stress](/writing/stress)
 
 ## Code
 
