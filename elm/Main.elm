@@ -41,26 +41,39 @@ route =
 -- UPDATE
 
 update msg model =
-  case Debug.log "update of main:" msg of
-    Routing.NewUrl s -> (model, Routing.decodeUrl s)
-    Routing.UrlDecoded (loc, origin) ->
-      if Debug.log "comp res" ((Debug.log "left" origin) /= (Debug.log "right" loc.origin)) then model ! [Navigation.load loc.href] else urlChange2 loc model
-    Routing.UrlChange loc -> urlChange loc model
 
-urlChange loc model =
-  case Debug.log "hamada" (parsePath route loc) of
+  case msg of
+    Routing.NewUrl s ->
+      (model, Routing.decodeUrl s)
+
+    Routing.UrlDecoded (loc, origin) ->
+      let
+        sameOrigin = origin == loc.origin
+        elmPage = isElmPage loc
+        moveToUrl = model ! [Navigation.newUrl loc.href] -- doesn't force a page load, so Elm is still in control
+        loadUrl = model ! [Navigation.load loc.href] -- forces a page load. So, first checks the existing files (or goes to another website entirely)
+      in
+        if sameOrigin && elmPage then
+          moveToUrl -- This will fire a UrlChange
+        else
+          loadUrl
+
+    Routing.UrlChange loc ->
+      onUrlChanged loc model
+
+-- Assumes the origin is your website.
+isElmPage loc =
+  case parsePath route loc of
+    Nothing -> True
+    Just (Routing.Elm _) -> True
+    Just (Routing.NonElm _ _) -> False
+
+onUrlChanged loc model =
+  case parsePath route loc of
     Nothing -> { model | route = NotFound } ! []
     Just res ->
       case res of
         Routing.Elm route -> { model | route = route } ! []
-        Routing.NonElm url _ -> model ! [Navigation.load url]
-
-urlChange2 loc model =
-  case Debug.log "hamada2" (parsePath route loc) of
-    Nothing -> { model | route = NotFound } ! []
-    Just res ->
-      case res of
-        Routing.Elm route -> { model | route = route } ! [Navigation.newUrl loc.href]
         Routing.NonElm url _ -> model ! [Navigation.load url]
 
 

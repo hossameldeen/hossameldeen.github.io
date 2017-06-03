@@ -18739,13 +18739,22 @@ var _user$project$Main$route = _evancz$url_parser$UrlParser$oneOf(
 			}
 		}
 	});
-var _user$project$Main$urlChange = F2(
+var _user$project$Main$isElmPage = function (loc) {
+	var _p3 = A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc);
+	if (_p3.ctor === 'Nothing') {
+		return true;
+	} else {
+		if (_p3._0.ctor === 'Elm') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+};
+var _user$project$Main$onUrlChanged = F2(
 	function (loc, model) {
-		var _p3 = A2(
-			_elm_lang$core$Debug$log,
-			'hamada',
-			A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc));
-		if (_p3.ctor === 'Nothing') {
+		var _p4 = A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc);
+		if (_p4.ctor === 'Nothing') {
 			return A2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
 				_elm_lang$core$Native_Utils.update(
@@ -18753,13 +18762,13 @@ var _user$project$Main$urlChange = F2(
 					{route: _user$project$Main$NotFound}),
 				{ctor: '[]'});
 		} else {
-			var _p4 = _p3._0;
-			if (_p4.ctor === 'Elm') {
+			var _p5 = _p4._0;
+			if (_p5.ctor === 'Elm') {
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{route: _p4._0}),
+						{route: _p5._0}),
 					{ctor: '[]'});
 			} else {
 				return A2(
@@ -18767,45 +18776,7 @@ var _user$project$Main$urlChange = F2(
 					model,
 					{
 						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$load(_p4._0),
-						_1: {ctor: '[]'}
-					});
-			}
-		}
-	});
-var _user$project$Main$urlChange2 = F2(
-	function (loc, model) {
-		var _p5 = A2(
-			_elm_lang$core$Debug$log,
-			'hamada2',
-			A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc));
-		if (_p5.ctor === 'Nothing') {
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				_elm_lang$core$Native_Utils.update(
-					model,
-					{route: _user$project$Main$NotFound}),
-				{ctor: '[]'});
-		} else {
-			var _p6 = _p5._0;
-			if (_p6.ctor === 'Elm') {
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{route: _p6._0}),
-					{
-						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$newUrl(loc.href),
-						_1: {ctor: '[]'}
-					});
-			} else {
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$load(_p6._0),
+						_0: _elm_lang$navigation$Navigation$load(_p5._0),
 						_1: {ctor: '[]'}
 					});
 			}
@@ -18813,31 +18784,37 @@ var _user$project$Main$urlChange2 = F2(
 	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p7 = A2(_elm_lang$core$Debug$log, 'update of main:', msg);
-		switch (_p7.ctor) {
+		var _p6 = msg;
+		switch (_p6.ctor) {
 			case 'NewUrl':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _user$project$Routing$decodeUrl(_p7._0)
+					_1: _user$project$Routing$decodeUrl(_p6._0)
 				};
 			case 'UrlDecoded':
-				var _p8 = _p7._0._0;
-				return A2(
-					_elm_lang$core$Debug$log,
-					'comp res',
-					!_elm_lang$core$Native_Utils.eq(
-						A2(_elm_lang$core$Debug$log, 'left', _p7._0._1),
-						A2(_elm_lang$core$Debug$log, 'right', _p8.origin))) ? A2(
+				var _p7 = _p6._0._0;
+				var loadUrl = A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{
 						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$load(_p8.href),
+						_0: _elm_lang$navigation$Navigation$load(_p7.href),
 						_1: {ctor: '[]'}
-					}) : A2(_user$project$Main$urlChange2, _p8, model);
+					});
+				var moveToUrl = A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$newUrl(_p7.href),
+						_1: {ctor: '[]'}
+					});
+				var elmPage = _user$project$Main$isElmPage(_p7);
+				var sameOrigin = _elm_lang$core$Native_Utils.eq(_p6._0._1, _p7.origin);
+				return (sameOrigin && elmPage) ? moveToUrl : loadUrl;
 			default:
-				return A2(_user$project$Main$urlChange, _p7._0, model);
+				return A2(_user$project$Main$onUrlChanged, _p6._0, model);
 		}
 	});
 var _user$project$Main$main = A2(
@@ -18851,7 +18828,7 @@ var _user$project$Main$main = A2(
 				{route: _user$project$Main$Home});
 		},
 		update: _user$project$Main$update,
-		subscriptions: function (_p9) {
+		subscriptions: function (_p8) {
 			return _user$project$Routing$onUrlDecoded(_user$project$Routing$UrlDecoded);
 		},
 		view: _user$project$Main$view
