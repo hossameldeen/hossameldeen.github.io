@@ -32,7 +32,7 @@ parseWith o = MDBlock.parse (Just o)
 customizeLink inline =
   case inline of
     MDInline.Link url maybeTitle inlines ->
-      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (Routing.NewUrl url)] (List.map customizeLink inlines)
+      a [href url, title (Maybe.withDefault "" maybeTitle), onPreventDefaultClick (Routing.GoToUrl url)] (List.map customizeLink inlines)
     _ -> MDInline.defaultHtml (Just customizeLink) inline
 
 onPreventDefaultClick message =

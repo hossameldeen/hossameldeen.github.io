@@ -18494,36 +18494,25 @@ var _user$project$Routing$onUrlDecoded = _elm_lang$core$Native_Platform.incoming
 						A2(_elm_lang$core$Json_Decode$field, 'host', _elm_lang$core$Json_Decode$string));
 				},
 				A2(_elm_lang$core$Json_Decode$field, 'href', _elm_lang$core$Json_Decode$string)))));
-var _user$project$Routing$NonElm = F2(
-	function (a, b) {
-		return {ctor: 'NonElm', _0: a, _1: b};
-	});
+var _user$project$Routing$NonElm = {ctor: 'NonElm'};
 var _user$project$Routing$Elm = function (a) {
 	return {ctor: 'Elm', _0: a};
 };
-var _user$project$Routing$compose = F3(
-	function (parent, constructor, result) {
+var _user$project$Routing$compose = F2(
+	function (constructor, result) {
 		var _p0 = result;
 		if (_p0.ctor === 'Elm') {
 			return _user$project$Routing$Elm(
 				constructor(_p0._0));
 		} else {
-			var _p2 = _p0._0;
-			var _p1 = _p0._1;
-			return A2(
-				_user$project$Routing$NonElm,
-				_p1 ? A2(
-					_elm_lang$core$Basics_ops['++'],
-					parent,
-					A2(_elm_lang$core$Basics_ops['++'], '/', _p2)) : _p2,
-				_p1);
+			return _user$project$Routing$NonElm;
 		}
 	});
 var _user$project$Routing$UrlDecoded = function (a) {
 	return {ctor: 'UrlDecoded', _0: a};
 };
-var _user$project$Routing$NewUrl = function (a) {
-	return {ctor: 'NewUrl', _0: a};
+var _user$project$Routing$GoToUrl = function (a) {
+	return {ctor: 'GoToUrl', _0: a};
 };
 var _user$project$Routing$UrlChange = function (a) {
 	return {ctor: 'UrlChange', _0: a};
@@ -18575,7 +18564,7 @@ var _user$project$MarkdownWrapper$customizeLink = function (inline) {
 					_1: {
 						ctor: '::',
 						_0: _user$project$MarkdownWrapper$onPreventDefaultClick(
-							_user$project$Routing$NewUrl(_p2)),
+							_user$project$Routing$GoToUrl(_p2)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -18622,8 +18611,8 @@ var _user$project$Code$route = _evancz$url_parser$UrlParser$oneOf(
 		ctor: '::',
 		_0: A2(
 			_evancz$url_parser$UrlParser$map,
-			A2(_user$project$Routing$NonElm, 'maplestory-lmpq-solver.html', true),
-			_evancz$url_parser$UrlParser$s('maplestory-lmpq-solver')),
+			_user$project$Routing$NonElm,
+			_evancz$url_parser$UrlParser$s('maplestory-lmpq-solver.html')),
 		_1: {ctor: '[]'}
 	});
 var _user$project$Code$Model = function (a) {
@@ -18679,7 +18668,7 @@ var _user$project$Ports$dummyPort = _elm_lang$core$Native_Platform.outgoingPort(
 		return v;
 	});
 
-var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
+var _user$project$Main$content = '\nI\'m Hossam El-Deen and this is my personal website.\nI hold no responsibility whatsoever for anything on it.\nI may lie. I may be wrong. I may change my mind anytime I want.\n\nUse at your own risk.\n\n## Writing\n\n- [Stress](/writing/stress)\n\n## Code\n\n- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver.html).\nPlease, note that I don\'t endorse Maplestory in anyway whatsoever. I\nhaven\'t played it in long time.\n\n';
 var _user$project$Main$viewHome = function (dontCare) {
 	return _user$project$MarkdownWrapper$viewMD(_user$project$Main$content);
 };
@@ -18721,7 +18710,7 @@ var _user$project$Main$route = _evancz$url_parser$UrlParser$oneOf(
 			ctor: '::',
 			_0: A2(
 				_evancz$url_parser$UrlParser$map,
-				A2(_user$project$Routing$compose, 'writing', _user$project$Main$Writing),
+				_user$project$Routing$compose(_user$project$Main$Writing),
 				A2(
 					_evancz$url_parser$UrlParser_ops['</>'],
 					_evancz$url_parser$UrlParser$s('writing'),
@@ -18730,7 +18719,7 @@ var _user$project$Main$route = _evancz$url_parser$UrlParser$oneOf(
 				ctor: '::',
 				_0: A2(
 					_evancz$url_parser$UrlParser$map,
-					A2(_user$project$Routing$compose, 'code', _user$project$Main$Code),
+					_user$project$Routing$compose(_user$project$Main$Code),
 					A2(
 						_evancz$url_parser$UrlParser_ops['</>'],
 						_evancz$url_parser$UrlParser$s('code'),
@@ -18739,22 +18728,13 @@ var _user$project$Main$route = _evancz$url_parser$UrlParser$oneOf(
 			}
 		}
 	});
-var _user$project$Main$isElmPage = function (loc) {
-	var _p3 = A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc);
-	if (_p3.ctor === 'Nothing') {
-		return true;
-	} else {
-		if (_p3._0.ctor === 'Elm') {
-			return true;
-		} else {
-			return false;
-		}
-	}
-};
-var _user$project$Main$onUrlChanged = F2(
-	function (loc, model) {
-		var _p4 = A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc);
-		if (_p4.ctor === 'Nothing') {
+var _user$project$Main$onUrlChanged = F3(
+	function (loc, model, isFromElmCode) {
+		var _p3 = A2(
+			_elm_lang$core$Debug$log,
+			'parseRes: ',
+			A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc));
+		if (_p3.ctor === 'Nothing') {
 			return A2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
 				_elm_lang$core$Native_Utils.update(
@@ -18762,13 +18742,20 @@ var _user$project$Main$onUrlChanged = F2(
 					{route: _user$project$Main$NotFound}),
 				{ctor: '[]'});
 		} else {
-			var _p5 = _p4._0;
-			if (_p5.ctor === 'Elm') {
-				return A2(
+			var _p4 = _p3._0;
+			if (_p4.ctor === 'Elm') {
+				return isFromElmCode ? A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$newUrl(loc.href),
+						_1: {ctor: '[]'}
+					}) : A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{route: _p5._0}),
+						{route: _p4._0}),
 					{ctor: '[]'});
 			} else {
 				return A2(
@@ -18776,7 +18763,8 @@ var _user$project$Main$onUrlChanged = F2(
 					model,
 					{
 						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$load(_p5._0),
+						_0: _elm_lang$navigation$Navigation$load(
+							A2(_elm_lang$core$Debug$log, 'NonElmUrl: ', loc.href)),
 						_1: {ctor: '[]'}
 					});
 			}
@@ -18784,37 +18772,26 @@ var _user$project$Main$onUrlChanged = F2(
 	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p6 = msg;
-		switch (_p6.ctor) {
-			case 'NewUrl':
+		var _p5 = A2(_elm_lang$core$Debug$log, 'update', msg);
+		switch (_p5.ctor) {
+			case 'GoToUrl':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _user$project$Routing$decodeUrl(_p6._0)
+					_1: _user$project$Routing$decodeUrl(_p5._0)
 				};
 			case 'UrlDecoded':
-				var _p7 = _p6._0._0;
-				var loadUrl = A2(
+				var _p6 = _p5._0._0;
+				return (!_elm_lang$core$Native_Utils.eq(_p5._0._1, _p6.origin)) ? A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{
 						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$load(_p7.href),
+						_0: _elm_lang$navigation$Navigation$load(_p6.href),
 						_1: {ctor: '[]'}
-					});
-				var moveToUrl = A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$newUrl(_p7.href),
-						_1: {ctor: '[]'}
-					});
-				var elmPage = _user$project$Main$isElmPage(_p7);
-				var sameOrigin = _elm_lang$core$Native_Utils.eq(_p6._0._1, _p7.origin);
-				return (sameOrigin && elmPage) ? moveToUrl : loadUrl;
+					}) : A3(_user$project$Main$onUrlChanged, _p6, model, true);
 			default:
-				return A2(_user$project$Main$onUrlChanged, _p6._0, model);
+				return A3(_user$project$Main$onUrlChanged, _p5._0, model, false);
 		}
 	});
 var _user$project$Main$main = A2(
@@ -18828,7 +18805,7 @@ var _user$project$Main$main = A2(
 				{route: _user$project$Main$Home});
 		},
 		update: _user$project$Main$update,
-		subscriptions: function (_p8) {
+		subscriptions: function (_p7) {
 			return _user$project$Routing$onUrlDecoded(_user$project$Routing$UrlDecoded);
 		},
 		view: _user$project$Main$view

@@ -11,15 +11,15 @@ port onUrlDecoded : ((Navigation.Location, String) -> msg) -> Sub msg
 
 type Result route =
     Elm route
-  | NonElm String Bool -- Bool : True for relative, in respect to Elm logic. False for absolute (whether same domain or no).
+  | NonElm
 
 type Msg =
     UrlChange Navigation.Location
-  | NewUrl String
+  | GoToUrl String
   | UrlDecoded (Navigation.Location, String)
 
-compose : String -> (a -> b) -> Result a -> Result b
-compose parent constructor result =
+compose : (a -> b) -> Result a -> Result b
+compose constructor result =
   case result of
     Elm route -> Elm (constructor route)
-    NonElm url isRelative -> NonElm (if isRelative then parent ++ "/" ++ url else url) isRelative
+    NonElm -> NonElm

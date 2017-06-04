@@ -33,8 +33,8 @@ type Route = Home | NotFound | Writing Writing.Route | Code Code.Route
 route =
   oneOf
     [ map (Routing.Elm Home) top
-    , map (Routing.compose "writing" Writing) (s "writing" </> Writing.route)
-    , map (Routing.compose "code" Code) (s "code" </> Code.route)
+    , map (Routing.compose Writing) (s "writing" </> Writing.route)
+    , map (Routing.compose Code) (s "code" </> Code.route)
     ]
 
 
@@ -42,40 +42,28 @@ route =
 
 update msg model =
 
-  case msg of
-    Routing.NewUrl s ->
+  case Debug.log "update" msg of
+    Routing.GoToUrl s ->
       (model, Routing.decodeUrl s)
 
     Routing.UrlDecoded (loc, origin) ->
-      let
-        sameOrigin = origin == loc.origin
-        elmPage = isElmPage loc
-        moveToUrl = model ! [Navigation.newUrl loc.href] -- doesn't force a page load, so Elm is still in control
-        loadUrl = model ! [Navigation.load loc.href] -- forces a page load. So, first checks the existing files (or goes to another website entirely)
-      in
-        if sameOrigin && elmPage then
-          moveToUrl -- This will fire a UrlChange
-        else
-          loadUrl
+      if origin /= loc.origin then
+        model ! [Navigation.load loc.href]
+      else
+        onUrlChanged loc model True
 
     Routing.UrlChange loc ->
-      onUrlChanged loc model
+      onUrlChanged loc model False
 
--- Assumes the origin is your website.
-isElmPage loc =
-  case parsePath route loc of
-    Nothing -> True
-    Just (Routing.Elm _) -> True
-    Just (Routing.NonElm _ _) -> False
-
-onUrlChanged loc model =
-  case parsePath route loc of
+onUrlChanged loc model isFromElmCode =
+  case Debug.log "parseRes: " (parsePath route loc) of
     Nothing -> { model | route = NotFound } ! []
     Just res ->
       case res of
-        Routing.Elm route -> { model | route = route } ! []
-        Routing.NonElm url _ -> model ! [Navigation.load url]
-
+        Routing.Elm route ->
+          if isFromElmCode then model ! [Navigation.newUrl loc.href]
+          else { model | route = route } ! []
+        Routing.NonElm -> model ! [Navigation.load (Debug.log "NonElmUrl: " loc.href)]
 
 -- VIEW
 
@@ -105,7 +93,7 @@ Use at your own risk.
 
 ## Code
 
-- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver).
+- [Maplestory Ludimaze PQ Solver](/code/maplestory-lmpq-solver.html).
 Please, note that I don't endorse Maplestory in anyway whatsoever. I
 haven't played it in long time.
 
