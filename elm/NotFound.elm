@@ -17,5 +17,5 @@ content : String
 content = """
 The link you wrote doesn't exist.
 
-Go to [https://hossameldeengithub.io/](https://hossameldeengithub.io/)? perhaps you find it there.
+Go to [https://hossameldeen.github.io/](https://hossameldeen.github.io/)? perhaps you find it there.
 """
