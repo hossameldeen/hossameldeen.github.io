@@ -56,7 +56,7 @@ update msg model =
       onUrlChanged loc model False
 
 onUrlChanged loc model isFromElmCode =
-  case Debug.log "parseRes: " (parsePath route loc) of
+  case parsePath route loc of
     Nothing -> { model | route = NotFound } ! []
     Just res ->
       case res of

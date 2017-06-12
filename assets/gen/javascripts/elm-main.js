@@ -18730,10 +18730,7 @@ var _user$project$Main$route = _evancz$url_parser$UrlParser$oneOf(
 	});
 var _user$project$Main$onUrlChanged = F3(
 	function (loc, model, isFromElmCode) {
-		var _p3 = A2(
-			_elm_lang$core$Debug$log,
-			'parseRes: ',
-			A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc));
+		var _p3 = A2(_evancz$url_parser$UrlParser$parsePath, _user$project$Main$route, loc);
 		if (_p3.ctor === 'Nothing') {
 			return A2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
