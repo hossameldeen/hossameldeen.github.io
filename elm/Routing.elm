@@ -1,6 +1,5 @@
 port module Routing exposing (Msg(..), Result(..), compose, decodeUrl, onUrlDecoded)
 
-import Html exposing (Html)
 import Navigation
 
 

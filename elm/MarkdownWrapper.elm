@@ -7,7 +7,6 @@ import Html exposing (Html, a, div)
 import Html.Attributes exposing (href, title)
 import Html.Events exposing (defaultOptions, onWithOptions)
 import Json.Decode
-import Markdown as MD
 import Markdown.Block as MDBlock
 import Markdown.Config as MDConfig
 import Markdown.Inline as MDInline
@@ -37,6 +36,7 @@ parseWith o =
     MDBlock.parse (Just o)
 
 
+customizeLink : MDInline.Inline i -> Html Routing.Msg
 customizeLink inline =
     case inline of
         MDInline.Link url maybeTitle inlines ->
@@ -46,6 +46,7 @@ customizeLink inline =
             MDInline.defaultHtml (Just customizeLink) inline
 
 
+onPreventDefaultClick : msg -> Html.Attribute msg
 onPreventDefaultClick message =
     onWithOptions "click"
         { defaultOptions | preventDefault = True }
@@ -54,6 +55,7 @@ onPreventDefaultClick message =
         )
 
 
+preventDefault2 : Json.Decode.Decoder Bool
 preventDefault2 =
     Json.Decode.map2
         invertedOr
@@ -61,6 +63,7 @@ preventDefault2 =
         (Json.Decode.field "metaKey" Json.Decode.bool)
 
 
+maybePreventDefault : msg -> Bool -> Json.Decode.Decoder msg
 maybePreventDefault msg preventDefault =
     case preventDefault of
         True ->

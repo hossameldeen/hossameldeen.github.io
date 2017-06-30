@@ -25,6 +25,7 @@ type Route
     = Stress
 
 
+view : Model -> Html msg
 view model =
     case model.route of
         Stress ->

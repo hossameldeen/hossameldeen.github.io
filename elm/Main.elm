@@ -1,13 +1,10 @@
 module Main exposing (..)
 
 import Code
-import Crash
 import Html exposing (Html)
-import List.Nonempty as NE exposing ((:::), Nonempty)
 import MarkdownWrapper as MD
 import Navigation
 import NotFound
-import Ports
 import Routing
 import UrlParser exposing (..)
 import Writing
@@ -39,6 +36,7 @@ type Route
     | Code Code.Route
 
 
+route : Parser (Routing.Result Route -> internalTypeOfParser) internalTypeOfParser
 route =
     oneOf
         [ map (Routing.Elm Home) top
@@ -51,6 +49,10 @@ route =
 -- UPDATE
 
 
+update :
+    Routing.Msg
+    -> Model
+    -> ( Model, Cmd msg )
 update msg model =
     case Debug.log "update" msg of
         Routing.GoToUrl s ->
@@ -66,6 +68,11 @@ update msg model =
             onUrlChanged loc model False
 
 
+onUrlChanged :
+    Navigation.Location
+    -> Model
+    -> Bool
+    -> ( Model, Cmd msg )
 onUrlChanged loc model isFromElmCode =
     case parsePath route loc of
         Nothing ->
@@ -103,6 +110,7 @@ view { route } =
             Code.view { route = route }
 
 
+viewHome : a -> Html Routing.Msg
 viewHome dontCare =
     MD.viewMD content
 
@@ -111,6 +119,7 @@ viewHome dontCare =
 -- CONTENT
 
 
+content : String
 content =
     """
 I'm Hossam El-Deen and this is my personal website.
