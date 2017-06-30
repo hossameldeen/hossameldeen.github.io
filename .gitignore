@@ -1,2 +1,3 @@
-.idea
-elm/elm-stuff
+/.idea
+/elm/elm-stuff
+/atom-linter-elm-make-work-directory
