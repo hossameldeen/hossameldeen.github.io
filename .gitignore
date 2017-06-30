@@ -1,3 +1,4 @@
 /.idea
 /elm/elm-stuff
-/atom-linter-elm-make-work-directory
+/elm/atom-linter-elm-make-work-directory/*
+!/elm/atom-linter-elm-make-work-directory/.gitkeep
