@@ -1,20 +1,27 @@
-module Code exposing (route, Route, view)
+module Code exposing (Route, route, view)
 
-import Html exposing (Html, pre, text, div, br, b, input)
-import Html.Attributes exposing (attribute, style, id, placeholder)
-import UrlParser exposing (..)
-import Routing
 import Crash
+import Html exposing (Html, b, br, div, input, pre, text)
+import Html.Attributes exposing (attribute, id, placeholder, style)
+import Routing
+import UrlParser exposing (..)
+
 
 route =
-  oneOf
-    [ map (Routing.NonElm) (s "maplestory-lmpq-solver.html")
-    ]
+    oneOf
+        [ map Routing.NonElm (s "maplestory-lmpq-solver.html")
+        ]
 
-type Route = SHOULDNTBEUSED
 
-type alias Model = { route : Route }
+type Route
+    = SHOULDNTBEUSED
+
+
+type alias Model =
+    { route : Route }
+
 
 view model =
-  case model.route of
-    SHOULDNTBEUSED -> Crash.view
+    case model.route of
+        SHOULDNTBEUSED ->
+            Crash.view

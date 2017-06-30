@@ -1,31 +1,43 @@
-module Writing exposing (route, Route, view)
+module Writing exposing (Route, route, view)
 
 import Html exposing (Html, pre, text)
 import Html.Attributes exposing (style)
-import UrlParser exposing (..)
 import MarkdownWrapper as MD
 import Routing
+import UrlParser exposing (..)
+
 
 route =
-  oneOf
-    [ map (Routing.Elm Stress) (s "stress")
-    ]
+    oneOf
+        [ map (Routing.Elm Stress) (s "stress")
+        ]
+
+
 
 -- VIEW
 
-type alias Model = { route : Route }
 
-type Route = Stress
+type alias Model =
+    { route : Route }
+
+
+type Route
+    = Stress
+
 
 view model =
-  case model.route of
-    Stress -> pre [style [("word-wrap", "break-word"), ("white-space", "pre-wrap")]] [text stress]
+    case model.route of
+        Stress ->
+            pre [ style [ ( "word-wrap", "break-word" ), ( "white-space", "pre-wrap" ) ] ] [ text stress ]
+
 
 
 -- CONTENT
 
+
 stress : String
-stress = """
+stress =
+    """
 Stress
 ======
 
