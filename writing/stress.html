@@ -1,44 +1,12 @@
-module Writing exposing (Route, route, view)
+<html>
+<head>
+    <title>
+        Hossam El-Deen
+    </title>
+</head>
 
-import Html exposing (Html, pre, text)
-import Html.Attributes exposing (style)
-import MarkdownWrapper as MD
-import Routing
-import UrlParser exposing (..)
-
-
-route =
-    oneOf
-        [ map (Routing.Elm Stress) (s "stress")
-        ]
-
-
-
--- VIEW
-
-
-type alias Model =
-    { route : Route }
-
-
-type Route
-    = Stress
-
-
-view : Model -> Html msg
-view model =
-    case model.route of
-        Stress ->
-            pre [ style [ ( "word-wrap", "break-word" ), ( "white-space", "pre-wrap" ) ] ] [ text stress ]
-
-
-
--- CONTENT
-
-
-stress : String
-stress =
-    """
+<body>
+    <pre style="word-wrap: break-word; white-space: pre-wrap">
 Stress
 ======
 
@@ -89,5 +57,6 @@ Ctrl+T away.
 
 But I probably won't. If you do, please tell me.
 ======================================================================
-
-"""
+    </pre>
+</body>
+</html>

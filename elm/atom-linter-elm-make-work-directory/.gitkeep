@@ -1,2 +1,0 @@
-I want to git-ignore the contents of `atom-linter-elm-make-work-directory`. However, I want to add an empty `atom-linter-elm-make-work-directory` to git because atom linter-make doesn't create it. Git *seems* to not allow committing empty directories, so I'm adding this file to commit the directory.
-Thanks: https://stackoverflow.com/a/4250082/6690391
