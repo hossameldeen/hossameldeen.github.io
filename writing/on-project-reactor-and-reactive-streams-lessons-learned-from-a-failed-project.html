@@ -1,0 +1,224 @@
+<html>
+<head>
+    <title>
+        Hossam El-Deen
+    </title>
+    <!-- Partly taken from https://lamport.azurewebsites.net/tla/tla.html -->
+    <style>
+        body {max-width: 750px;}
+        p {max-width: 700px;}
+    </style>
+</head>
+
+<body>
+
+<h1>DRAFT! NOT PUBLISHED YET! AND THE PROJECT PROBABLY DIDN'T REALLY FAIL, CHECK THE DISCLAIMER AT THE END!</h1>
+
+<h1>On Project Reactor and Reactive Streams</h1>
+<h2>Lessons Learned from a Failed Project</h2>
+
+<hr/>
+
+<h2>Project Background</h2>
+<p>
+    The project was a backend program periodically fetched data points from
+    several systems and do some business on them. It also had endpoints that
+    could be called.
+</p>
+<p>
+    Our default stack is, shamefully, <i>Spring framework</i>. For some reason
+    I honestly never fully understood, it seemed like it wouldn't be able to
+    handle a big number of parallel requests and it'd be hard to scale in the
+    future. I honestly don't want to talk a lot about the the <i>why</i> of
+    we went on to use <i>Project Reactor</i> because I, unproudly, didn't know.
+    In my defense, this was one of my first projects, and there was the open
+    office that reduced my productivity by much.
+</p>
+<p>
+    For those who don't know, <i>Project Reactor</i> is an implementation of
+    <i>Reactive Streams</i> made by <i>Spring framework</i>'s people.
+</p>
+
+<h2><i>Project Reactor</i>'s problems</h2>
+
+<h3><i>Rx</i> is an API deadend</h3>
+<p>
+    <i>Project Reactor</i>'s API is based on <i>Rx</i>'s, one of the first
+    libraries, if not the first, that implemented <i>Reactive Streams</i>.
+    Actually, I even think that <i>Reactive Streams</i> came after it.<br/>
+    That API can be considered a first-generation API and APIs after it may
+    have fixed some of the problems it has. The main problem we faced with this
+    API is mixing graph-building and graph-running (called
+    <i>materialization</i> in <i>Akka Streams</i>) phases. It's a huge huge
+    source of bugs.
+</p>
+<p>
+    First, there's the problem of forgetting to subscribe on a branch. Actually,
+    we were using <i>Behaviour-Driven Development</i> and <i>Cucumber</i>.
+    Everything worked in <i>Cucumber</i> and as soon as we ran the application,
+    nothing happened. It's because we basically weren't calling
+    <i>subscribe()</i> in our main code.
+</p>
+<p>
+    To be honest, that's a simple problem and easy enough to catch. But it shows
+    the unintuitiveness of <i>Rx</i>'s API. <i>subscribe()</i> seems like just a
+    way to say that you're interested in the output of this <i>Flux</i>, not
+    <i>Nothing is gonna happen till you subscribe()!</i>. Contrast that with
+    <i>Akka Streams</i>' <i>materialization</i> phase and how it separates, in
+    code and docs, between writing the blueprint of a graph and materializing it.
+    <br/>
+    (Disclaimer: Didn't use and don't know enough of <i>Akka Streams</i> and don't necessarily recommend).
+</p>
+<p>
+    And of course, the problem of subscribing twice to a branch.
+</p>
+<p>
+    In general, don't expect to be able to build a graph of integration of
+    business logic with <i>Rx</i>'s API like you'd do with <i>Apache Camel</i>.<br/>
+    (Disclaimer #2: Didn't use and don't know enough of <i>Apache Camel</i> and don't necessarily recommend).
+</p>
+
+<h3>The diamond problem</h3>
+<p>
+    The diamond problem is another consequence of the API. Assume you have the
+    following code:
+</p>
+    <code>
+        Mono&lt;HTTPResp> A = callAnApi();<br/>
+        Mono&lt;> B = A.map(...);<br/>
+        Mono&lt;> C = A.map(...);<br/>
+        Mono&lt;> D = A.merge(B);<br/>
+        D.subscribe();
+    </code>
+<p>
+    (Clearly, not a formal code)
+</p>
+<p>
+    <code>callAnApi()</code> would be called twice. If <code>callAnApi()</code>
+    wasn't a simple <i>HTTP GET</i>, you're in a big trouble.
+</p>
+<p>
+    This case is easy enough to catch. But it got really hairy with us when the
+    diamond problem occurred in a case involving <code>.onError(...)</code>. The
+    main graph didn't have a diamond but in the few cases the code in
+    <code>.onError(...)</code> got executed a diamond problem would show up.
+</p>
+<p>
+    Basically, in the end, we'd given up on forking and combining. We'd do
+    everything unnecessarily sequentially except in the simplest of cases that
+    could be done with a <code>flatMap</code>. And don't know remember what we
+    did to make sure we don't fall into the trap of diamond-problem-on-error
+    case again. It's a failed project after all.
+</p>
+
+<h3><i>Project Reactor</i> isn't suitable for <i>staltz</i>'s <i>Reactivity</i></h3>
+<p>
+    I was first introduced to <i>Reactive Streams</i> by <i>staltz</i>'s
+    definition of <i>Reactive</i> vs <i>Passive</i> programming. The idea that
+    a software component (for some definition of software component) should
+    know what affects it and shouldn't care about what it affects. For example,
+    a class wouldn't have generic setters that anyone can calls that you'd then
+    keep <i>Ctrl+clicking</i> to know where they're called to know what changes
+    the variables in this class.
+</p>
+<p>
+    <i>Project Reactor</i> wasn't meant to be <i>reactive</i>.
+</p>
+
+<h3>A red flag: The way API seems to be designed</h3>
+<p>
+    This is a common problem with today's software tools. They stopped following
+    <i>Occam's razor</i> principle. Basically, they stopped stopping and asking
+    themselves: <i>"What APIs are just syntactic sugar and what APIs are
+    essential?"</i>. I have no problem with having a multitude of helper
+    functions, but I have a huge problem with not separating the necessary from
+    the derived. Typical of <i>Spring</i>.
+</p>
+
+<h2>What <i>Project Reactor</i> is meant for</h2>
+<p>
+    So, how to use it such that it's actually useful?
+</p>
+<p>
+    That's just a guess. But don't use it in a <i>reactivey</i> (according to
+    <i>staltz</i>'s definition of <i>reactive</i>) way at all. Use it like an
+    enhanced <i>Future</i> and one well-integrated with <i>Spring</i>. If you'd
+    always asked yourself how I could return an async response in a
+    <i>Spring</i> <i>Controller</i> that's the way if you can use <i>Spring 5</i>.
+</p>
+<p>
+    Also, if you'd always wanted to use a non-blocking I/O library for calling
+    an API in <i>Spring</i>, use <i>Reactor Netty</i>. Now, you'll have
+    everything integrated in a nice way.
+</p>
+<p>
+    But honestly, even in that way, I don't know if you'll face the problems
+    we've faced with its API or no. I believe you will. But if you need async
+    and are in <i>Spring</i> and <i>Java</i>'s ecosystem, I expect you'll face
+    more problems with whatever solution you go with.
+</p>
+
+<h2>Last words</h2>
+<p>
+    Now, I remember. I think I remember why we went to <i>Project Reactor</i>.
+    We were looking for a solution that: (1) solved Concurrency, (2) solved
+    Blocking I/O, and (3) had a good integration with <i>Spring</i>.
+    <i>Project Reactor</i>'s ecosystem will probably solve #2 and #3,
+    but it surely won't solve #1. Whatever race conditions you'd faced using
+    <i>Java</i>'s sequential model, you'd face with <i>Project Reactor</i> as
+    well, beside some more problems like the ones mentioned above.
+</p>
+<p>
+    And I don't know what <i>non-blocking I/O</i> is. I just know what people
+    repeat.
+</p>
+
+<hr/>
+
+<h2>Links</h2>
+<p>
+    These are non-links on purpose. Please, don't just go wandering over the
+    Web till the day you die. Have a purpose and be more organized in your
+    surfing.
+</p>
+<p>
+    - <i>Why Reactivity Matters</i>, a session from <i>PolyConf</i> by <i>staltz</i>.
+</p>
+<p>
+    - An excerpt related to <i>Occam's razor</i>:<br/>
+    <i>In 1960, John McCarthy published a remarkable paper in which he did for programming something like what Euclid did for geometry. He showed how, given a handful of simple operators and a notation for functions, you can build a whole programming language.</i><br/>
+    Source: Paul Graham's <i>The Roots of Lisp</i>
+</p>
+<p>
+    - What my team leader kept saying we were looking for in a tool:<br/>
+    http://camel.apache.org/enterprise-integration-patterns.html
+</p>
+
+<hr/>
+
+<h2>Disclaimers</h2>
+<p>
+    The project hadn't really failed. The Product Owner and the management
+    seem to be happy with it. It passes the demos and all. It's just that I'm
+    not happy with the codebase.
+</p>
+<p>
+    And the blame isn't all on <i>Project Reactor</i>. We have problems
+    unrelated to it. Actually, not knowing what <i>non-blocking I/O</i> is shows
+    you something (I kind-of know, but not happy with the level of abstraction
+    at which I know. And the other members seem to know, probably it's just me).
+</p>
+<p>
+    Finally, I seriously, <i>seriously</i>, have no idea what I'm talking about. The
+    project was months ago. I didn't touch <i>Reactive Streams</i> since then.
+    The project I've worked on after and I'm working on now, doesn't have scalability
+    or high load in scope and we're doing it as a typical <i>Spring</i> project. So,
+    didn't have the chance to revisit this stuff yet.
+</p>
+<p>
+    The essay is full of emotional and propaganda words, which show a lack of
+    understanding.Read on your own risk (too late?).
+</p>
+
+</body>
+</html>
